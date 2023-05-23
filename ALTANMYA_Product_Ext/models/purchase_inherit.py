@@ -10,7 +10,7 @@ class SaleOrderLine(models.Model):
                                                                ('for_all_vendors', '=', True)]).ids
         res = {}
         res['domain'] = {'product_id': [('id', 'in', product_ids),
-                                        ('sale_ok', '=', True), '|',
+                                        ('purchase_ok', '=', True), '|',
                                         ('company_id', '=', False),
                                         ('company_id', '=', self.company_id.id)]}
         return res

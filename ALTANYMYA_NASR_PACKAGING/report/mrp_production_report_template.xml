@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="ALTANYMYA_NASR_PACKAGING.nasr_report_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page" dir="LTR"
+                             style="font-family: Courier New; font-size: 14pt; font-weight: bold; width:100%">
+                            <div class="line"
+                                 style="border-top: 1px solid white; margin-top: 30px; padding-top: 30px;"/>
+                            <div class="line" style="border-top: 1px solid black; margin-top: 0px; padding-top: 0px;"/>
+                            <table class="table table-borderless" style="font-size: 16pt; width:100%">
+                                <tr>
+                                    <td style="width:40%">
+                                        <div style="margin-left: -40px;">
+                                            <span t-field="o.name"
+                                                  t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:250px;height:50px'}"/>
+                                        </div>
+                                    </td>
+                                    <td style="width:20%">
+                                        <div>Job Ticket</div>
+                                    </td>
+                                    <td style="width:40%">
+                                        <div style="text-align: right;">
+                                            <span t-field="o.name"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="table table-borderless table-sm"
+                                   style="margin-top: -17px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 10px; border: 1px solid black; width:100%">
+                                <tr>
+                                    <td style="width:80%">
+                                        <span t-field="o.product_id"/>
+                                        <br/>
+                                        <span style="font-weight: normal;">
+                                            <span t-field="o.sale_order_partner_id"/>
+                                            <br/>
+                                            <span t-field="o.sale_order_client_order_ref"/>
+                                            <br/>
+                                            <span t-field="o.sale_order_id"/>
+
+                                        </span>
+                                    </td>
+                                    <td style="border-left: 1px solid black; text-align: center; width:20%">
+                                        <span>Delivery On</span>
+                                        <br/>
+                                        <div class="line"
+                                             style="border-top: 1px solid black; margin-top: 20px; padding-top: 20px;"/>
+                                        <span t-if="o.schedule_date_mrp">
+                                            <span t-esc="o.schedule_date_mrp.strftime('%d/%m/%Y')"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-borderless table-sm"
+                                   style="border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 10px; border: 1px solid black; width:100%">
+                                <tr style="text-align: center;">
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">Quantity
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">Ups
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">
+                                        Impression
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">No.of
+                                        Colors - Quality
+                                    </td>
+                                    <td colspan="2" style="border-bottom: 1px solid black;">Board - gm²</td>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.product_qty"/>
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.product_id.outs"/>
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.impression"/>
+                                    </td>
+                                    <td colspan="1"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.color_quality"/>
+                                    </td>
+                                    <td colspan="2" style="border-bottom: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.board_gsm"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black; text-align: center;">
+                                        Production Process
+                                    </td>
+                                    <td colspan="2"
+                                        style="border-bottom: 1px solid black; border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.product_id.process"/>
+                                    </td>
+                                    <td colspan="2"
+                                        style="border-bottom: 1px solid black; text-align: center; font-weight: normal;">
+                                        <span style="font-weight: normal;" t-field="o.sale_order_line_id.job_type"/>
+                                    </td>
+                                </tr>
+                                <tr style="text-align: center;">
+                                    <td style="border-right: 1px solid black;">Sheet Size</td>
+                                    <td style="border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.sheet_size"/>
+                                    </td>
+                                    <td style="border-right: 1px solid black;">Cut Size</td>
+                                    <td style="border-right: 1px solid black;">
+                                        <span style="font-weight: normal;" t-field="o.cut_size"/>
+                                    </td>
+                                    <td colspan="1">Pack Qty.</td>
+                                    <td colspan="1">
+                                        <span style="font-weight: normal;" t-field="o.product_id.pack_qty"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <!--<span style="border-left: 1px solid black; height: 600px; position: absolute; left: 50%; margin-left: -3px;"/>-->
+                            <table class="table table-borderless" style=" width:100%;">
+                                <tr>
+                                    <td style="vertical-align: top; width:50%; border-right: 1px solid black;">
+                                        <span>Remarks</span>
+                                        <br/>
+                                        <br/>
+                                        <span style="font-weight: normal;" t-field="o.bom_id.remarks"/>
+                                    </td>
+                                    <td style="vertical-align: top; width:50%;">
+                                        <center>
+                                            <br/>
+                                            <br/>
+                                            <img t-if="o.product_id.image_1920"
+                                                 t-att-src="image_data_uri(o.product_id.image_1920)" border="0"
+                                                 style="width: 90%;"/>
+                                        </center>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <div class="footer o_standard_footer">
+                                <div dir="LTR"
+                                     style="font-family: Courier New; font-size: 14pt; font-weight: bold; width:100%">
+                                    <table class="table table-borderless" style="width:100%">
+                                        <tr style="text-align: center;">
+                                            <td colspan="1">DTS (Pre-Press)</td>
+                                            <td colspan="1">Material Planning</td>
+                                            <td colspan="1">Quality Control</td>
+                                            <td colspan="1">Plant Manager</td>
+                                            <td colspan="1">Warehouse</td>
+                                        </tr>
+                                        <tr>
+                                            <td/>
+                                        </tr>
+                                        <tr>
+                                            <td/>
+                                        </tr>
+                                        <tr style="text-align: center;">
+                                            <td colspan="1">__________________</td>
+                                            <td colspan="1">__________________</td>
+                                            <td colspan="1">__________________</td>
+                                            <td colspan="1">__________________</td>
+                                            <td colspan="1">__________________</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

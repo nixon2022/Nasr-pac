@@ -9,6 +9,8 @@
                 <xpath expr="//page[1]/group[1]/group[1]/field[1]" position="after">
                     <field name="for_all_customers"/>
                     <field name="customer" attrs="{ 'invisible': [('for_all_customers', '=', True)]}"/>
+                    <field name="for_all_vendors"/>
+                    <field name="vendor" attrs="{ 'invisible': [('for_all_vendors', '=', True)]}"/>
                 </xpath>
             </field>
         </record>

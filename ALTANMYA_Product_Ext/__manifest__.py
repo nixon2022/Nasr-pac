@@ -4,7 +4,7 @@
     "summary": "Add Customer Field On Product Template Form",
     "version": "1.0",
     "category": "sale",
-    "depends": ["sale", "product"],
+    "depends": ["sale", "product", "purchase"],
     "data": ["views/product_template_views.xml"],
     "installable": True,
     "auto_install": False,

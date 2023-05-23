@@ -23,7 +23,7 @@ class ProductProduct(models.Model):
                                        related='product_tmpl_id.for_all_customers',
                                        readonly=False)
     vendor = fields.Many2one('res.partner',
-                               related='product_tmpl_id.customer',
+                               related='product_tmpl_id.vendor',
                                string="Vendor",
                                readonly=False)
     for_all_vendors = fields.Boolean(string="Make This Product For All Vendors",

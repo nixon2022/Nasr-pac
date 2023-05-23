@@ -24,6 +24,8 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_id']" position="after">
                 <field name="pallet"/>
+                <field name="No_of_carton"/>
+                <field name="No_of_pcs"/>
                 <field name="delivery_date"/>
             </xpath>
         </field>

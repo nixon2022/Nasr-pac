@@ -55,19 +55,21 @@
         <field name="model">shift.production</field>
         <field name="arch" type="xml">
             <tree string="Shift Productions" editable="top" sample="1" expand="1">
+                <field name="edit_line" invisible="0"/>
                 <field name="sequence"/>
-                <field name="shift"/>
-                <field name="job_ticket"/>
-                <field name="finished_product"/>
-                <field name="operator"/>
-                <field name="date"/>
-                <field name="duration_from"/>
-                <field name="duration_to"/>
-                <field name="duration"/>
+                <field name="shift" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="job_ticket" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="finished_product" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="operation" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="operator" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="date" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="duration_from" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="duration_to" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="duration" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="job_ticket_qty" invisible="1"/>
-                <field name="quantity_done"/>
-                <field name="outs"/>
-                <field name="sheets_done"/>
+                <field name="quantity_done" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="outs" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="sheets_done" attrs="{'readonly':[('edit_line', '=', False)]}"/>
             </tree>
         </field>
     </record>

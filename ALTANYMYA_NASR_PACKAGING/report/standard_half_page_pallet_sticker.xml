@@ -15,20 +15,18 @@
                                     </center>
                                     <br/>
                                     <br/>
-                                    <table class="table table-bordered table-sm"
-                                           style="
-                                                   text-align: center;
-                                                   margin-top: -17px;
-                                                   border-collapse: separate;
-                                                   border-spacing: 0;
-                                                   overflow: hidden;
-                                                   border-radius: 10px;
-                                                   border: 1px solid black;
-                                                   height: 50vh;
-                                                   width: 100%">
+                                    <table class="table table-borderless table-sm" style="text-align: center;
+                                    margin-top: -17px;
+                                    border-collapse: separate;
+                                    border-spacing: 0;
+                                    overflow: hidden;
+                                    border-radius: 10px;
+                                    border: 1px solid black;
+                                    height: 50%;
+                                    width: 100%">
                                         <tr style="height:20%;">
-                                            <td colspan="2">
-                                                <div style="font-size: 32pt;">
+                                            <td colspan="2" style="border-bottom: 1px solid black;">
+                                                <div style="line-height: 1; font-size: 32pt;">
                                                     ISMAIL ABUDAWOOD AND
                                                     <br/>
                                                     PROCTER &amp; GAMBLE LIMITED
@@ -36,29 +34,31 @@
                                             </td>
                                         </tr>
                                         <tr style="height:30%;">
-                                            <td colspan="2">
+                                            <td colspan="2" style="line-height: 1; border-bottom: 1px solid black;">
                                                 <t t-if="product.product_id">
                                                     <span style="font-size: 36pt;" t-esc="product.product_id.name"/>
                                                 </t>
                                             </td>
                                         </tr>
                                         <tr style="height:10%;">
-                                            <td colspan="2">
+                                            <td colspan="2" style="border-bottom: 1px solid black;">
                                                 <span t-field="o.sale_order_id.client_order_ref"/>
                                             </td>
                                         </tr>
                                         <tr style="height:20%;">
-                                            <td style="font-size: 24pt;" colspan="2">
+                                            <td style="font-size: 24pt; border-bottom: 1px solid black;" colspan="2">
                                                 <span t-field="product.qty_done"/>
                                                 <span>PCS</span>
                                             </td>
                                         </tr>
                                         <tr style="height:10%;">
-                                            <td colspan="1" style="text-transform: none; text-align: left">
+                                            <td colspan="1"
+                                                style="border-bottom: 1px solid black; text-transform: none; text-align: left">
                                                 <span style="font-weight: normal;">Operators</span>
                                                 <span>Operator</span>
                                             </td>
-                                            <td colspan="1" style="text-transform: none; text-align: left">
+                                            <td colspan="1"
+                                                style="border-left: 1px solid black; border-bottom: 1px solid black; text-transform: none; text-align: left">
                                                 <span style="font-weight: normal;">Prod.Date</span>
                                                 <t t-if="o.date_done">
                                                     <span t-esc="o.date_done.strftime('%d/%m/%Y')"/>

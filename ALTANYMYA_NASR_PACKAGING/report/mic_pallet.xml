@@ -62,26 +62,20 @@
                                                             <t t-set="mrms" t-value="str('00038913')"/>
                                                         </t>
                                                     </t>
-
                                                 </t>
-                                                <br/>
-                                                <br/>
                                                 <div>supplier:</div>
 
-                                                <table style="width: 100%">
+                                                <table class="table table-borderless" style="width: 100%">
                                                     <tr>
-                                                        <td style="width: 50%">
-                                                            <br/>
-                                                            <center style="font-size: 48pt">
+                                                        <td style="line-height: 1; border-bottom: 1px solid black; border-left: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; font-size: 42pt; width: 50%">
+                                                            <center>
                                                                 NASRPAC
-                                                                <span style="font-size: 42pt;">
-                                                                    JEDDAH,KSA
-                                                                </span>
+                                                                <br/>
+                                                                JEDDAH,KSA
                                                             </center>
                                                         </td>
-                                                        <td style="width: 50%">
+                                                        <td style="border-bottom: 1px solid black; border-right: 1px solid black; border-top: 1px solid black; width: 50%">
                                                             <div style="font-size: 18pt; margin-left: 30px;">
-                                                                <br/>
                                                                 <div>
                                                                     <span>sup.product#:</span>
                                                                     <t t-if="last8digits">
@@ -105,18 +99,20 @@
                                                                     <t t-set="pallet_num" t-value="product_pallet + 1"/>
                                                                     <span t-esc="pallet_num"/>
                                                                 </div>
-                                                                <br/>
                                                             </div>
                                                         </td>
                                                     </tr>
                                                 </table>
-                                                <span style="margin-top: 3px;">MATERIAL DESCRIPTION:</span>
-                                                <div style="font-size: 42pt;" t-field="product.product_id.name"/>
+                                                <div style="margin-top: -10px;">MATERIAL DESCRIPTION:</div>
+                                                <div style="line-height: 1; font-size: 36pt;"
+                                                     t-field="product.product_id.name"/>
+                                                <div style="border-bottom: 1px solid black;"/>
                                                 <br/>
                                                 <br/>
-                                                <table class="table" style="border: 1px solid black; width:100%;">
+
+                                                <table class="table table-borderless" style="width:100%;">
                                                     <tr>
-                                                        <td style="width: 50%">
+                                                        <td style="border-right: 1px solid black; width: 50%">
                                                             <div>IPMS/GCAS#:</div>
                                                             <t t-if="last8digits">
                                                                 <span style="font-size: 24pt;" t-esc="last8digits"/>
@@ -129,7 +125,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td style="width: 50%">
+                                                        <td style="border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; width: 50%">
                                                             <div>LOT#:</div>
                                                             <t t-if="last7digits and o.partial_delivery">
                                                                 <t t-set="lot"
@@ -141,7 +137,7 @@
                                                                 <span style="font-size: 24pt;" t-esc="lot"/>
                                                             </t>
                                                         </td>
-                                                        <td style="width: 50%">
+                                                        <td style="border-top: 1px solid black; border-bottom: 1px solid black; width: 50%">
                                                             <div>PALLET TYPE</div>
                                                             <span style="font-size: 24pt;">NONE</span>
                                                         </td>

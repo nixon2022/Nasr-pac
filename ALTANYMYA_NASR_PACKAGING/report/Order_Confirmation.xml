@@ -5,21 +5,21 @@
             <t t-call="web.html_container">
                 <t t-foreach="docs" t-as="o">
                     <t t-call="web.external_layout">
-                        <div class="page" dir="LTR" style="font-size: 14pt; font-family: Calibri; width: 100%;">
-                            <table style="width:100%; line-height: 1.5;">
+                        <div class="page" dir="LTR" style="font-size: 14pt; font-family: arial; width: 100%;">
+                            <table class="table table-borderless" style="width:100%; line-height: 1;">
                                 <tr style="line-height: 2;">
-                                    <td colspan="6">
+                                    <td colspan="6" style="border: 1px solid black;">
                                         <Center style="font-weight: bold; font-size: 16pt;">ORDER CONFIRMATION</Center>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">Order ID:</div>
                                     </td>
-                                    <td colspan="4">
+                                    <td colspan="4" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px" t-field="o.name"/>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <t t-if="o.date_order">
                                             <div style="font-weight: bold; margin-left: 5px"
                                                  t-esc="o.date_order.strftime('%d/%m/%Y')"/>
@@ -27,39 +27,39 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">Customer:</div>
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px" t-field="o.partner_id"/>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">Client ID:</div>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px" t-field="o.partner_id.vat"/>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px"
                                              t-field="o.partner_id.company_new_field"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">To</div>
                                     </td>
-                                    <td colspan="5">
+                                    <td colspan="5" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px" t-field="o.to_ID"/>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">P.O.#</div>
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px" t-field="o.client_order_ref"/>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">
                                             <span>Dated:</span>
                                             <t t-if="o.p_o">
@@ -67,10 +67,10 @@
                                             </t>
                                         </div>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <div style="font-weight: bold; margin-left: 5px">Received on:</div>
                                     </td>
-                                    <td colspan="1">
+                                    <td colspan="1" style="border: 1px solid black;">
                                         <t t-if="o.received_on">
                                             <div style="font-weight: bold; margin-left: 5px"
                                                  t-esc="o.received_on.strftime('%d/%m/%Y')"/>
@@ -85,70 +85,71 @@
                                     order as follows;
                                 </div>
                             </span>
-                            <table style="width:100%; line-height: 1.5; text-align: center">
+                            <table class="table table-borderless"
+                                   style="width:100%; line-height: 1; text-align: center">
                                 <tr style="font-weight: bold;">
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Job ticket
                                         <br/>
                                         No
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Product Name
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Dimension
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Material
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Printing
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Finishing
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Rate
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Qty
                                     </td>
-                                    <td>
+                                    <td style="border: 1px solid black;">
                                         Delivery Date
                                     </td>
                                 </tr>
                                 <t t-foreach="o.order_line" t-as="line">
                                     <tr>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;" t-field="line.manufacturing_order_id"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;" t-field="line.product_id.name"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;" t-field="line.product_id.dimension"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;"
                                                   t-field="line.manufacturing_order_id.board_gsm"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;"
                                                   t-field="line.manufacturing_order_id.color_quality"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;" t-field="line.finishing"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <t t-if="line.price_unit">
                                                 <t t-set="rate" t-value="line.price_unit * 1000"/>
                                                 <span style="font-weight: normal;" t-esc="rate"/>
                                             </t>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span style="font-weight: normal;" t-field="line.product_uom_qty"/>
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <t t-if="line.delivery_date_sale_order_line">
                                                 <span style="font-weight: normal;"
                                                       t-esc="line.delivery_date_sale_order_line.strftime('%d/%m/%Y')"/>
@@ -157,7 +158,7 @@
                                     </tr>
                                 </t>
                                 <tr>
-                                    <td colspan="9">
+                                    <td colspan="9" style="border: 1px solid black;">
                                         <div style="text-align: right; font-weight: bold; margin-right: 40px;">
                                             Rates are based on SR/1000 unless it is mentioned
                                         </div>

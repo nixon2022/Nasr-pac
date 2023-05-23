@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="ALTANYMYA_NASR_PACKAGING.nasr_report_mic_invoice_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page" dir="LTR"
+                             style="font-family: Courier New; font-size: 12pt; font-weight: bold; width:100%">
+                            <div class="line" style="border-top: 1px solid black; margin-top: 0px; padding-top: 0px;"/>
+                            <table class="table table-borderless" style="width:100%">
+                                <tr>
+                                    <td colspan="1">
+                                        <span style="font-weight: normal;">اسم العميل</span>
+                                    </td>
+                                    <td colspan="4">
+                                        <span t-field="o.partner_id.arabic_name_nasr"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">
+                                        <span style="font-weight: normal;">عنوان العميل</span>
+                                    </td>
+                                    <td colspan="4">
+                                        <span style="font-weight: normal;" t-field="o.partner_id.street2"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">Customer Name</td>
+                                    <td colspan="4">
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">Customer Address</td>
+                                    <td colspan="4">
+                                        <span style="font-weight: normal;" t-field="o.partner_id.street"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">
+                                        <span>Customer VAT ID</span>
+                                        <span style="font-weight: normal;">الرقم الضريبي للعميل</span>
+                                    </td>
+                                    <td colspan="4">
+                                        <span style="font-weight: normal;" t-field="o.partner_id.vat"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">
+                                        <span>Invoice Issue Date</span>
+                                        <span style="font-weight: normal;">تاريخ اصدار الفاتورة</span>
+                                    </td>
+                                    <td colspan="4">
+                                        <span style="font-weight: normal;" t-field="o.invoice_date"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1">
+                                        <span>Invoice Number</span>
+                                        <span style="font-weight: normal;">رقم الفاتورة</span>
+                                    </td>
+                                    <td colspan="4">
+                                        <span style="font-weight: normal;" t-field="o.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table class="table table-borderless table-sm"
+                                   style="font-weight: normal; text-align: center; margin-top: -17px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 10px; border: 1px solid black; width:100%">
+                                <tr>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">SN</span>
+                                        <br/>
+                                        الرقم
+                                    </td>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">Description</span>
+                                        <br/>
+                                        الوصف
+                                    </td>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">Unit Price/1000</span>
+                                        <br/>
+                                        سعر الوحدة/1000
+                                    </td>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">Quantity</span>
+                                        <br/>
+                                        الكمية
+                                    </td>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">Total Amt</span>
+                                        <br/>
+                                        المبلغ قبل الضريبة
+                                    </td>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">VAT Rate</span>
+                                        <br/>
+                                        نسبة الضريبة
+                                    </td>
+                                    <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">VAT Amt</span>
+                                        <br/>
+                                        قيمة الضريبة
+                                    </td>
+                                    <td style="border-bottom: 1px solid black;">
+                                        <span style="font-weight: bold;">Total Amount Including VAT</span>
+                                        <br/>
+                                        الاجمالي يشمل الضريبة
+                                    </td>
+                                </tr>
+                                <t t-set="iterations" t-value="1"/>
+                                <t t-set="total_price" t-value="0"/>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <tr>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <span t-esc="iterations"/>
+                                            <t t-set="iterations" t-value="iterations + 1"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <t t-if="line.price_unit">
+                                                <t t-set="result_price" t-value="line.price_unit * 1000"/>
+                                                <t t-esc="result_price"/>
+                                            </t>
+                                        </td>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <span t-field="line.quantity"/>
+                                        </td>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <span t-field="line.price_subtotal"/>
+                                            <t t-set="total_price" t-value="total_price + line.price_subtotal"/>
+                                        </td>
+                                        <td style="font-weight: bold; border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <t t-if="line.tax_ids">
+                                                <t t-set="tax_amount" t-value="str(line.tax_ids.amount) + str('%')"/>
+                                                <t t-esc="tax_amount"/>
+                                            </t>
+                                        </td>
+                                        <td style="border-right: 1px solid black; border-bottom: 1px solid black;">
+                                            <span t-field="line.l10n_gcc_invoice_tax_amount"/>
+                                        </td>
+                                        <td style="border-bottom: 1px solid black">
+                                            <span t-field="line.price_total"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="4"/>
+                                    <td colspan="1">
+                                        <t t-esc="total_price"/>
+                                    </td>
+                                    <td colspan="3"/>
+                                </tr>
+                                <tr style=" border: 0;">
+                                    <td colspan="2" style="font-weight: bold; width:100%; border: 0;">
+                                        <div style="text-align: left;">
+                                            <img t-if="o.l10n_sa_qr_code_str"
+                                                 t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('QR', o.l10n_sa_qr_code_str, 400, 400)"
+                                                 alt="QR Code" style="margin-left : 20px; height:100px;"/>
+                                        </div>
+                                    </td>
+                                    <td colspan="6" dir="RTL" style="font-weight: bold;">
+                                        <p style="text-align: right;">
+                                            <span t-field="o.amount_untaxed"/>
+                                            <span style="font-weight: normal;">اجمالي قبل الضريبة</span>
+                                            Total excludes VAT
+                                        </p>
+                                        <p style="text-align: right;">
+                                            <span t-field="o.amount_tax"/>
+                                            <span style="font-weight: normal;">اجمالي ضريبة القيمة المضافة
+                                            </span>
+                                            VAT Total
+                                        </p>
+                                        <p style="text-align: right;">
+                                            <span t-field="o.amount_total"/>
+                                            <span style="font-weight: normal;">اجمالي المبلغ يشمل ضريبة
+                                                القيمة المضافة
+                                            </span>
+                                            Total Amount includes VAT
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

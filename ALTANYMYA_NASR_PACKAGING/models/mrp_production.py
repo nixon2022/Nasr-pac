@@ -118,8 +118,9 @@ class MrpProductionNasr(models.Model):
     @api.depends('sale_order_id')
     def _compute_sale_order_line_id(self):
         for rec in self:
+            rec.sale_order_line_id = None
             if rec.sale_order_id:
-                values = self.env['sale.order.line'].search([('order_id', '=', self.sale_order_id.ids)])
+                values = self.env['sale.order.line'].search([('order_id', 'in', self.sale_order_id.ids)])
                 for lines in values:
                     if lines.product_id == rec.product_id and lines.product_uom_qty == rec.product_qty:
                         rec.sale_order_line_id = lines

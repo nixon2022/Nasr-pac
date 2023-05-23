@@ -8,6 +8,8 @@
             <xpath expr="//field[20]" position="after">
                 <field name="delivery_date"/>
                 <field name="pallet"/>
+                <field name="No_of_carton"/>
+                <field name="No_of_pcs"/>
                 <field name="qty_done"/>
             </xpath>
         </xpath>

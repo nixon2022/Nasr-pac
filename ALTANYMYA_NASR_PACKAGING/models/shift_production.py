@@ -1,6 +1,7 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
+
 class ShiftProductionNasr(models.Model):
     _name = 'shift.production'
     _rec_name = 'sequence'
@@ -22,6 +23,25 @@ class ShiftProductionNasr(models.Model):
     outs = fields.Float(string='Outs')
     sheets_done = fields.Float(string='Sheets Done')
     job_ticket_qty = fields.Float(string='Sheets Done', compute="_compute_job_ticket_qty")
+    edit_line = fields.Boolean('Edit Line')
+
+    def write(self, vals):
+        vals['edit_line'] = False
+        res = super(ShiftProductionNasr, self).write(vals)
+        return res
+
+    @api.onchange('edit_line', 'job_ticket')
+    def _get_operation_domains(self):
+        if self.job_ticket:
+            result = {}
+            res = []
+            for record in self.job_ticket.workorder_ids:
+                filtering = self.env['mrp.routing.workcenter'].search([('name', '=', record.name)])
+                for filtered in filtering:
+                    if filtered.bom_id.id == self.job_ticket.bom_id.id:
+                        res.append(filtered.id)
+            result['domain'] = {'operation': [('id', 'in', res)]}
+            return result
 
     @api.onchange('sheets_done', 'outs')
     def compute_quantity_done(self):
@@ -31,24 +51,13 @@ class ShiftProductionNasr(models.Model):
     @api.depends('job_ticket')
     def _compute_job_ticket_qty(self):
         for rec in self:
+            allshifts = self.env['shift.production'].search([('id', '>', -1)])
+            for i in allshifts:
+                i.edit_line = False
             if rec.job_ticket:
                 rec.job_ticket_qty = rec.job_ticket.product_qty
             else:
                 rec.job_ticket_qty = None
-
-    @api.onchange('job_ticket')
-    def set_domain_for_product(self):
-        for rec in self:
-            res = {}
-            res['domain'] = {'operation': [('id', 'in', rec.job_ticket.workorder_ids.workcenter_id.ids)]}
-            return res
-
-
-    # @api.model
-    # def search_read(self, domain=None, fields=None, offset=0, limit=None, order=None):
-    #     self.set_domain_for_product()
-    #     print(self.set_domain_for_product())
-    #     return super().search_read(domain=domain, fields=fields, offset=offset, limit=limit, order=order)
 
     @api.onchange('quantity_done', 'outs')
     def compute_sheets_done(self):
@@ -57,6 +66,25 @@ class ShiftProductionNasr(models.Model):
                 rec.sheets_done = 0
             else:
                 rec.sheets_done = rec.quantity_done / rec.outs
+
+    @api.depends('job_ticket')
+    @api.constrains('operation')
+    def check_operation(self):
+        for rec in self:
+            if rec.job_ticket:
+                res = []
+                for record in self.job_ticket.workorder_ids:
+                    filtering = self.env['mrp.routing.workcenter'].search([('name', '=', record.name)])
+                    for filtered in filtering:
+                        if filtered.bom_id.id == self.job_ticket.bom_id.id:
+                            res.append(filtered)
+
+                all_shifts = rec.env['shift.production'].search([('job_ticket', 'in', rec.job_ticket.ids)])
+                if rec.id == min(all_shifts).id:
+                    if res:
+                        if rec.operation.id > min(res).id:
+                            raise ValidationError(
+                                _("There should be other operation/s before this operation."))
 
     @api.constrains('quantity_done')
     def check_quantity_done(self):
@@ -71,19 +99,14 @@ class ShiftProductionNasr(models.Model):
                     ])
                     shift_all.append(shifts)
                 shift_all = [*set(shift_all)]
-                print('shift_all', shift_all)
                 for i in shift_all:
                     total = sum(i.mapped('quantity_done'))
-                    print('total', total)
                 curr_rec = self.env['shift.production'].search([
                     ('job_ticket', '=', rec.job_ticket.id),
                     ('operation', '=', rec.operation.id)
                 ])
-                print("curr_rec[0]", curr_rec[0].operation.name)
-                print('curr_rec', curr_rec)
                 if len(curr_rec) > 0:
                     total_qty_done = sum(curr_rec.mapped('quantity_done'))
-                    print('total_qty_done', total_qty_done)
                     if total_qty_done > rec.job_ticket_qty:
                         raise ValidationError(
                             _("The quantity done for this operation cannot exceed the job ticket quantity."))
@@ -91,14 +114,17 @@ class ShiftProductionNasr(models.Model):
                         if curr_rec[0].operation.id > i[0].operation.id:
                             if sum(i.mapped('quantity_done')) < total_qty_done:
                                 raise ValidationError(
-                                    _("The quantity done for this operation cannot exceed the job ticket quantity."))
+                                    _("The quantity done for this operation cannot exceed the job ticket quantity nor previous operation/s if existed."))
 
                         if curr_rec[0].operation.id < i[0].operation.id:
                             if sum(i.mapped('quantity_done')) > total_qty_done:
                                 raise ValidationError(
-                                    _("The quantity done for this operation cannot exceed the job ticket quantity."))
+                                    _("The quantity done for this operation cannot exceed the job ticket quantity nor previous operation/s if existed."))
 
-
+            if rec.job_ticket:
+                if rec.quantity_done > rec.job_ticket.product_qty:
+                    raise ValidationError(
+                        _("The quantity done for this operation cannot exceed the job ticket quantity."))
     @api.model
     def create(self, vals):
         if vals.get('sequence', _('New')) == ('New'):

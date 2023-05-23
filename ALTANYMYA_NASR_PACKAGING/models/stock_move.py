@@ -26,7 +26,7 @@ class StockMoveNasr(models.Model):
                 if rec.picking_id:
                     if rec.picking_id.sale_order_id:
                         values = self.env['sale.order.line'].search(
-                            [('order_id', '=', rec.picking_id.sale_order_id.ids)])
+                            [('order_id', 'in', rec.picking_id.sale_order_id.ids)])
                         for lines in values:
                             if lines.product_id == rec.product_id:
                                 del_date = lines.delivery_date_sale_order_line

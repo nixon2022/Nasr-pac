@@ -6,6 +6,8 @@ class StockMoveLineNasr(models.Model):
 
     pallet = fields.Integer(string="Pallet Number", default=1)
     delivery_date = fields.Datetime("Delivery Date", compute='_compute_delivery_date')
+    No_of_carton = fields.Integer(string="No. of Carton")
+    No_of_pcs = fields.Integer(string="No. of Pcs.")
 
     @api.depends('move_id')
     def _compute_delivery_date(self):

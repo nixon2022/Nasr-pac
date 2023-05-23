@@ -27,12 +27,3 @@ class SaleOrderLineNasr(models.Model):
                     rec.manufacturing_order_id = None
             else:
                 rec.manufacturing_order_id = None
-
-    @api.constrains('delivery_date_sale_order_line')
-    def check_delivery_date_sale_order_line(self):
-        for rec in self:
-            sale_order_id = self.env['sale.order'].search([('id', '=', rec.order_id.id)])
-            if sale_order_id.commitment_date:
-                if rec.delivery_date_sale_order_line >= sale_order_id.commitment_date:
-                    raise ValidationError(
-                        _('Delivery Date for each line must be less than the Sale Order Delivery Date'))

@@ -40,6 +40,16 @@
         <field name="binding_type">report</field>
     </record>
 
+    <record id="external_delivery_note_report" model="ir.actions.report">
+        <field name="name">External Deliery Note</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ALTANYMYA_NASR_PACKAGING.nasr_report_external_delivery_note_id</field>
+        <field name="report_file">ALTANYMYA_NASR_PACKAGING.nasr_report_external_delivery_note_id</field>
+        <field name="binding_model_id" ref="model_stock_picking"/>
+        <field name="binding_type">report</field>
+    </record>
+
     <record id="order_confirmation_report" model="ir.actions.report">
         <field name="name">Order Confirmation</field>
         <field name="model">sale.order</field>
@@ -47,6 +57,16 @@
         <field name="report_name">ALTANYMYA_NASR_PACKAGING.nasr_report_order_confirmation_id</field>
         <field name="report_file">ALTANYMYA_NASR_PACKAGING.nasr_report_order_confirmation_id</field>
         <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="mic_invoice_report" model="ir.actions.report">
+        <field name="name">MIC Invoice</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ALTANYMYA_NASR_PACKAGING.nasr_report_mic_invoice_id</field>
+        <field name="report_file">ALTANYMYA_NASR_PACKAGING.nasr_report_mic_invoice_id</field>
+        <field name="binding_model_id" ref="model_account_move"/>
         <field name="binding_type">report</field>
     </record>
 </odoo>

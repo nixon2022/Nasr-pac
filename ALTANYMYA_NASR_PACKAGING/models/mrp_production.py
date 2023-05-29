@@ -137,9 +137,6 @@ class MrpProductionNasr(models.Model):
                         [('product_id', '=', rec.product_id.id), ('origin', '=', rec.origin)])
                     for i in range(len(job_ticket)):
                         if job_ticket[i].id == rec.id:
-                            print(rec.id)
-                            print(job_ticket[i], i)
-                            print(line_order[i], i)
                             rec.sale_order_line_id = line_order[i]
                 else:
                     rec.sale_order_line_id = line_order

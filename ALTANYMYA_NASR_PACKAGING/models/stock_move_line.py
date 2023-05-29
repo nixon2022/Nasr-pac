@@ -10,6 +10,29 @@ class StockMoveLineNasr(models.Model):
     No_of_pcs = fields.Integer(string="No. of Pcs.")
     job_ticket_id = fields.Many2one('mrp.production', string='Job Ticket', compute='_compute_job_ticket_id')
 
+    # @api.depends('product_id')
+    # @api.onchange('product_id')
+    # def compute_default_carton_pieces(self):
+    #     for rec in self:
+    #         if rec.product_id:
+    #             rec.No_of_carton = rec.product_id.No_of_carton
+    #             rec.No_of_pcs = rec.product_id.No_of_pcs
+
+    @api.model
+    def create(self, vals):
+        res = super(StockMoveLineNasr, self).create(vals)
+        print('product_id', res['product_id'])
+        print('product_id No_of_carton', res['product_id'].No_of_carton)
+        print('product_id No_of_pcs', res['product_id'].No_of_pcs)
+        print('', res['No_of_carton'])
+        print('', res['No_of_pcs'])
+        res['No_of_carton'] = res['product_id'].No_of_carton
+        res['No_of_pcs'] = res['product_id'].No_of_pcs
+        print('No_of_carton', res['No_of_carton'])
+        print('No_of_pcs', res['No_of_pcs'])
+
+        return res
+
     @api.depends('picking_id')
     def _compute_job_ticket_id(self):
         for rec in self:

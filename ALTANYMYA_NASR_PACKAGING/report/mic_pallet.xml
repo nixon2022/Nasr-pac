@@ -124,9 +124,8 @@
                                                         <td style="width: 50%">
                                                             <div>QUANTITY :</div>
                                                             <t t-if="product_pallet_last">
-                                                                last on
                                                                 <span style="font-size: 24pt;"
-                                                                      t-esc="'%.0f'%(product.qty_done - new_qty)"/>
+                                                                      t-esc="'%.0f'%(abs(product.qty_done - new_qty))"/>
                                                                 <span style="font-size: 24pt;">pcs</span>
                                                             </t>
                                                             <t t-else="">

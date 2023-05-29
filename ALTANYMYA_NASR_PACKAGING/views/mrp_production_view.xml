@@ -12,6 +12,7 @@
                 <group>
                     <field name="sale_order_id"/>
                     <field name="sale_order_line_id" attrs="{'invisible':[('hide', '=', True)]}"/>
+                    <field name="sale_order_line_identifier" attrs="{'invisible':[('hide', '=', True)]}"/>
                     <field name="lead_days" invisible="1"/>
                     <field name="hide" invisible="1"/>
                     <field name="sale_order_partner_id" attrs="{'invisible':[('hide', '=', True)]}"/>
@@ -38,6 +39,8 @@
                             <field name="duration_from" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                             <field name="duration_to" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                             <field name="duration" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                            <field name="maintenance_time" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                            <field name="make_ready_time" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                             <field name="job_ticket_qty" invisible="1"/>
                             <field name="quantity_done" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                             <field name="outs" attrs="{'readonly':[('edit_line', '=', False)]}"/>

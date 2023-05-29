@@ -8,6 +8,9 @@
                         <div class="page" dir="LTR"
                              style="font-family: Courier New; font-size: 12pt; font-weight: bold; width:100%">
                             <div class="line" style="border-top: 1px solid black; margin-top: 0px; padding-top: 0px;"/>
+                            <h1>
+                                <center style="font-weight: bold;">INVOICE/فاتورة ضريبية</center>
+                            </h1>
                             <table class="table table-borderless" style="width:100%">
                                 <tr>
                                     <td colspan="1">

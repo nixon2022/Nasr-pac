@@ -18,6 +18,7 @@ class StockPickingNasr(models.Model):
     @api.depends('origin')
     def _compute_sale_order_id(self):
         for rec in self:
+            rec.sale_order_id = None
             if rec.origin:
                 rec.sale_order_id = rec.env['sale.order'].search([('name', '=', rec.origin)])
 

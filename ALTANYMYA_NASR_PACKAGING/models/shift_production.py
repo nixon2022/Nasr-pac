@@ -24,6 +24,8 @@ class ShiftProductionNasr(models.Model):
     sheets_done = fields.Float(string='Sheets Done')
     job_ticket_qty = fields.Float(string='Sheets Done', compute="_compute_job_ticket_qty")
     edit_line = fields.Boolean('Edit Line')
+    maintenance_time = fields.Float(string="Maintenance Time")
+    make_ready_time = fields.Float(string="Make Ready Time")
 
     def write(self, vals):
         vals['edit_line'] = False
@@ -125,6 +127,7 @@ class ShiftProductionNasr(models.Model):
                 if rec.quantity_done > rec.job_ticket.product_qty:
                     raise ValidationError(
                         _("The quantity done for this operation cannot exceed the job ticket quantity."))
+
     @api.model
     def create(self, vals):
         if vals.get('sequence', _('New')) == ('New'):

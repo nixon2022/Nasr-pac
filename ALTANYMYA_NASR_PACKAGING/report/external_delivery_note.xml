@@ -111,7 +111,7 @@
                                             <t t-set="iterations" t-value="iterations + 1"/>
                                         </td>
                                         <td style="border-bottom: 1px solid black; border-left: 1px solid black;">
-                                            <span t-field="o.job_ticket_id.name"/>
+                                            <span t-field="product.job_ticket_id.name"/>
                                         </td>
                                         <td style="border-bottom: 1px solid black; border-left: 1px solid black;">
                                             <span t-field="product.product_id"/>

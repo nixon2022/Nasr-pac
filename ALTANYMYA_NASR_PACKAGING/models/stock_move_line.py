@@ -22,19 +22,19 @@ class StockMoveLineNasr(models.Model):
                     rec.job_ticket_id = rec.move_id.sale_line_id.manufacturing_order_id
 
                     line_order = self.env['sale.order.line'].search(
-                        [('order_id', 'in', self.move_id.picking_id.sale_id.ids), ('product_id', '=', rec.product_id.id)])
+                        [('order_id', 'in', self.move_id.picking_id.sale_id.ids),
+                         ('product_id', '=', rec.product_id.id)])
                     if len(line_order) > 1:
                         job_ticket = self.env['mrp.production'].search(
-                            [('product_id', '=', rec.product_id.id), ('origin', '=', rec.move_id.picking_id.group_id.name)])
+                            [('product_id', '=', rec.product_id.id),
+                             ('origin', '=', rec.move_id.picking_id.group_id.name)])
                         print('job', job_ticket)
                         print('line', line_order)
-                        # for i in range(len(job_ticket)):
-                        #     if job_ticket[i].id == rec.id:
-                        #         print(rec.id)
-                        #         print(job_ticket[i], i)
-                        #         print(line_order[i], i)
-                        #         rec.job_ticket_id = job_ticket[i]
-
+                        for i in range(len(job_ticket)):
+                            if job_ticket[i].sale_order_line_id == rec.move_id.sale_line_id:
+                                print(rec.id)
+                                print(job_ticket[i], i)
+                                rec.job_ticket_id = job_ticket[i]
 
     @api.depends('move_id')
     def _compute_delivery_date(self):

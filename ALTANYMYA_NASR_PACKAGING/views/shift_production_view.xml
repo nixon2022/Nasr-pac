@@ -68,8 +68,9 @@
                 <field name="duration_from" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="duration_to" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="duration" attrs="{'readonly':[('edit_line', '=', False)]}"/>
-                <field name="maintenance_time" attrs="{'readonly':[('edit_line', '=', False)]}"/>
-                <field name="make_ready_time" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="machine_time" optional="hide" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="maintenance_time" optional="hide" attrs="{'readonly':[('edit_line', '=', False)]}"/>
+                <field name="make_ready_time" optional="hide" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="job_ticket_qty" invisible="1"/>
                 <field name="quantity_done" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="outs" attrs="{'readonly':[('edit_line', '=', False)]}"/>

@@ -26,7 +26,7 @@ class ShiftProductionNasr(models.Model):
     edit_line = fields.Boolean('Edit Line')
     maintenance_time = fields.Float(string="Maintenance Time")
     make_ready_time = fields.Float(string="Make Ready Time")
-    machine_time = fields.Float(string="Machine Time")
+    machine_time = fields.Char(string="Machine Name")
 
     def write(self, vals):
         vals['edit_line'] = False

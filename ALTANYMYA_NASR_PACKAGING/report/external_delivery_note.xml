@@ -15,7 +15,6 @@
                                         style="border-top: 1px solid black; border-right: 1px solid black; border-left: 1px solid black;">
                                         <center>
                                             EXTERNAL DELIVERY NOTE
-                                            <div style="font-weight: normal;">(MANUFACTURING TO DISPATCH)</div>
                                         </center>
                                     </td>
                                 </tr>
@@ -25,7 +24,7 @@
                                     </td>
                                     <td colspan="1"
                                         style="font-weight: normal; border-top: 1px solid black; border-left: 1px solid black;">
-                                        <div t-field="o.partner_id"/>
+                                        <div t-field="o.partner_id.name"/>
                                     </td>
                                     <td colspan="1" style="border-top: 1px solid black; border-left: 1px solid black;">
                                         Customer ID:
@@ -38,6 +37,22 @@
                                         <t t-else=" ">
                                             <div t-field="o.sale_id.partner_id.company_new_field"/>
                                         </t>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="1" style="border-top: 1px solid black; border-left: 1px solid black;">
+                                        Customer Street:
+                                    </td>
+                                    <td colspan="1"
+                                        style="font-weight: normal; border-top: 1px solid black; border-left: 1px solid black;">
+                                        <div t-field="o.partner_id.street"/>
+                                    </td>
+                                    <td colspan="1" style="border-top: 1px solid black; border-left: 1px solid black;">
+                                        Customer City:
+                                    </td>
+                                    <td colspan="1"
+                                        style="font-weight: normal; border-top: 1px solid black; border-right: 1px solid black; border-left: 1px solid black;">
+                                        <div t-field="o.partner_id.city"/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -141,13 +156,41 @@
                                 </t>
                             </table>
 
+                            <table class="table table-borderless" style="font-size: 12pt;font-weight: normal; width:100%;">
+                                <tr>
+                                    <td style="text-align: left; width:70%;">
+                                        <div>
+                                            Remarks:
+                                        </div>
+                                        <div t-field="o.remarks"/>
+                                    </td>
+                                    <td style="text-align: left; width:30%;">
+                                        <div>
+                                            Plate no.:
+                                            <span t-field="o.plate_number"/>
+                                        </div>
+                                        <div>
+                                            Driver:
+                                            <span t-field="o.driver"/>
+                                        </div>
+                                        <div>
+                                            Mobile No.:
+                                            <span t-field="o.mobile_number"/>
+                                        </div>
+                                        <div>
+                                            Transporter:
+                                            <span t-field="o.transporter"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+
                             <div class="footer o_standard_footer">
                                 <div class="row" style="report_footer_style">
                                     <div style="width: 100%;">
-                                        <table class="table table-borderless" style="text-align: center; font-weight: normal; width:100%;">
-
+                                        <table class="table table-borderless" style="font-weight: normal; width:100%;">
                                             <tr>
-                                                <td style="text-align: left;">
+                                                <td style="text-align: left; width:70%;">
                                                     <div>
                                                         Issued by
                                                     </div>
@@ -155,7 +198,7 @@
                                                         Manufacturing Supervisor
                                                     </div>
                                                 </td>
-                                                <td style="text-align: left;">
+                                                <td style="text-align: left; width:30%;">
                                                     <div>
                                                         Received by
                                                     </div>

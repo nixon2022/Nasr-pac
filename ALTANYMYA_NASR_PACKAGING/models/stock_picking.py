@@ -8,11 +8,6 @@ class StockPickingNasr(models.Model):
     partial_delivery = fields.Char(string='Partial Delivery', compute='_compute_partial_delivery')
     sale_order_id = fields.Many2one('sale.order', string='Sale Order', compute='_compute_sale_order_id')
     delivery_date_per_item_done = fields.Datetime("Delivery Date")
-    plate_number = fields.Char(string='Plate No.')
-    driver = fields.Char(string='Driver')
-    mobile_number = fields.Char(string='Mobile No.')
-    transporter = fields.Many2one('res.partner', string='Transporter')
-    remarks = fields.Html(string="Remarks")
 
     def button_validate(self):
         for rec in self:
@@ -23,7 +18,6 @@ class StockPickingNasr(models.Model):
     @api.depends('origin')
     def _compute_sale_order_id(self):
         for rec in self:
-            rec.sale_order_id = None
             if rec.origin:
                 rec.sale_order_id = rec.env['sale.order'].search([('name', '=', rec.origin)])
 

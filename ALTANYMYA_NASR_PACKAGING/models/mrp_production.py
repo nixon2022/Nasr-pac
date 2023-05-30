@@ -9,8 +9,6 @@ class MrpProductionNasr(models.Model):
     sale_order_id = fields.Many2one('sale.order', string='Sale Order', compute='_compute_sale_order_id')
     sale_order_line_id = fields.Many2one('sale.order.line', string="Sale Order Line",
                                          compute='_compute_sale_order_line_id')
-    sale_order_line_identifier = fields.Char(string="sale order identifier",
-                                             compute="_compute_sale_order_line_identifier")
     hide = fields.Boolean(string='Hide', compute="_compute_hide")
     sale_order_partner_id = fields.Char(string='Customer', compute='_compute_sale_order_partner_id')
     sale_order_client_order_ref = fields.Char(string='Customer Reference',
@@ -25,13 +23,6 @@ class MrpProductionNasr(models.Model):
     schedule_date_mrp = fields.Datetime(string="Schedule Date Per Line", compute="_compute_schedule_date_mrp")
     lead_days = fields.Integer(string="Lead Days", compute="_compute_lead_days")
     shift_production_lines = fields.One2many('shift.production', 'job_ticket')
-
-    @api.depends('sale_order_line_id')
-    def _compute_sale_order_line_identifier(self):
-        for rec in self:
-            rec.sale_order_line_identifier = None
-            if rec.sale_order_line_id:
-                rec.sale_order_line_identifier = rec.sale_order_line_id.id
 
     @api.depends('product_id')
     def _compute_lead_days(self):
@@ -129,17 +120,10 @@ class MrpProductionNasr(models.Model):
         for rec in self:
             rec.sale_order_line_id = None
             if rec.sale_order_id:
-                line_order = self.env['sale.order.line'].search(
-                    [('order_id', 'in', self.sale_order_id.ids), ('product_id', '=', rec.product_id.id),
-                     ('product_uom_qty', '=', rec.product_qty)])
-                if len(line_order) > 1:
-                    job_ticket = self.env['mrp.production'].search(
-                        [('product_id', '=', rec.product_id.id), ('origin', '=', rec.origin)])
-                    for i in range(len(job_ticket)):
-                        if job_ticket[i].id == rec.id:
-                            rec.sale_order_line_id = line_order[i]
-                else:
-                    rec.sale_order_line_id = line_order
+                values = self.env['sale.order.line'].search([('order_id', 'in', self.sale_order_id.ids)])
+                for lines in values:
+                    if lines.product_id == rec.product_id and lines.product_uom_qty == rec.product_qty:
+                        rec.sale_order_line_id = lines
             else:
                 rec.sale_order_line_id = None
 

@@ -16,4 +16,6 @@ class ProductTemplateNasr(models.Model):
     pack_qty = fields.Char(string="Pack Quantity")
     product_group = fields.Char(string="Product Group")
     dimension = fields.Char(string="Dimensions")
+    No_of_carton = fields.Integer(string="No. of Carton")
+    No_of_pcs = fields.Integer(string="No. of Pcs.")
 

@@ -24,18 +24,11 @@ class StockMoveNasr(models.Model):
         for rec in self:
             if rec.location_dest_id.usage == 'customer':
                 if rec.picking_id:
-                    if rec.picking_id.sale_order_id:
-                        values = self.env['sale.order.line'].search(
-                            [('order_id', 'in', rec.picking_id.sale_order_id.ids)])
-                        for lines in values:
-                            if lines.product_id == rec.product_id:
-                                del_date = lines.delivery_date_sale_order_line
-                                if del_date:
-                                    old_date = datetime.strptime(str(del_date), '%Y-%m-%d %H:%M:%S')
-                                    new_date = old_date - timedelta(days=rec.lead_days)
-                                    rec.delivery_date_per_item = new_date.strftime('%Y-%m-%d %H:%M:%S')
-                                else:
-                                    rec.delivery_date_per_item = None
+                    del_date = rec.sale_line_id.delivery_date_sale_order_line
+                    if del_date:
+                        old_date = datetime.strptime(str(del_date), '%Y-%m-%d %H:%M:%S')
+                        new_date = old_date - timedelta(days=rec.lead_days)
+                        rec.delivery_date_per_item = new_date.strftime('%Y-%m-%d %H:%M:%S')
                     else:
                         rec.delivery_date_per_item = None
                 else:

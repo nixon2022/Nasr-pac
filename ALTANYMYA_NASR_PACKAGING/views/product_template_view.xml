@@ -21,6 +21,8 @@
                         <field name="pack_qty"/>
                         <field name="product_group"/>
                         <field name="dimension"/>
+                        <field name="No_of_carton"/>
+                        <field name="No_of_pcs"/>
                     </group>
                 </page>
             </xpath>

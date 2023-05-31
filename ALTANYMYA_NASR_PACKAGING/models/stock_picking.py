@@ -54,3 +54,9 @@ class StockPickingNasr(models.Model):
         for rec in self:
             rec.random_unique_number = 1137356748381521741 + rec.id
             rec.random_unique_number = '(00)' + rec.random_unique_number[-17:]
+
+
+class StockPickingTypeNasr(models.Model):
+    _inherit = 'stock.picking.type'
+
+    generate_lot_id_nasr = fields.Boolean(string="Generate New Lot/Serial Number on Delivery")

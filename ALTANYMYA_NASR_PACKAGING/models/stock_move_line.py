@@ -27,26 +27,19 @@ class StockMoveLineNasr(models.Model):
         res['No_of_pcs'] = res['product_id'].No_of_pcs
         if res['move_id'].picking_id.group_id:
             if res['product_id'].tracking == 'lot':
-                # move_lines = self.env['stock.move.line'].search([('product_id', '=', res['product_id'].id)])
-                # moves = None
-                # for line in move_lines:
-                #     if line.lot_id:
-                #         moves = line.lot_id
-                # if moves:
-                #     res['lot_id'] = moves
-                # else:
-                lot_name = "NPSA" + res['move_id'].picking_id.group_id.name[-7:] + res['move_id'].picking_id.partial_delivery
-                lot_exist = self.env['stock.production.lot'].search([('name', '=', lot_name)])
-                if not lot_exist:
-                    lot_id = self.env['stock.production.lot'].create({
-                        'name': lot_name,
-                        'product_id': res['product_id'].id,
-                        # 'product_qty': res['product_id'].product_qty,
-                        'company_id': res['company_id'].id,
-                    })
-                    res['lot_id'] = lot_id
-                else:
-                    res['lot_id'] = lot_exist
+                if res['move_id'].picking_id.picking_type_id.generate_lot_id_nasr:
+                    lot_name = "NASP" + res['move_id'].picking_id.group_id.name[-7:] + res['move_id'].picking_id.partial_delivery
+                    lot_exist = self.env['stock.production.lot'].search([('name', '=', lot_name)])
+                    if not lot_exist:
+                        lot_id = self.env['stock.production.lot'].create({
+                            'name': lot_name,
+                            'product_id': res['product_id'].id,
+                            # 'product_qty': res['product_id'].product_qty,
+                            'company_id': res['company_id'].id,
+                        })
+                        res['lot_id'] = lot_id
+                    else:
+                        res['lot_id'] = lot_exist
         return res
 
     @api.depends('picking_id')

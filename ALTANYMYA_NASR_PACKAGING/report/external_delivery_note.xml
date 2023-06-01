@@ -103,7 +103,7 @@
                                             <th style="width: 20%; border-bottom: 0px solid black; border-left: 1px solid black;">
                                                 Job ticket No
                                             </th>
-                                            <th style="width: 20%; border-bottom: 0px solid black; border-left: 1px solid black;">
+                                            <th style="width: 15%; border-bottom: 0px solid black; border-left: 1px solid black;">
                                                 Product Description
                                             </th>
                                             <th style="width: 10%;border-bottom: 0px solid black; border-top: 0px solid black; border-left: 1px solid black;">
@@ -113,6 +113,11 @@
                                                 No. of
                                                 <br/>
                                                 Pallets
+                                            </th>
+                                            <th style="width: 10%; border-bottom: 0px solid black; border-top: 0px solid black; border-left: 1px solid black;">
+                                                No. of
+                                                <br/>
+                                                Lose Pallet
                                             </th>
                                             <th style="width: 10%;border-bottom: 0px solid black; border-top: 0px solid black; border-left: 1px solid black;">
                                                 No. of Carton/
@@ -147,6 +152,9 @@
                                                 </td>
                                                 <td style="border-top: 1px solid black; border-left: 1px solid black;">
                                                     <span t-field="o.move_line_ids_without_package[iterations - 2].pallet"/>
+                                                </td>
+                                                <td style="border-top: 1px solid black; border-left: 1px solid black;">
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].No_of_lose_pallet"/>
                                                 </td>
                                                 <td style="border-top: 1px solid black; border-left: 1px solid black;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].pallet and o.move_line_ids_without_package[iterations - 2].No_of_carton">

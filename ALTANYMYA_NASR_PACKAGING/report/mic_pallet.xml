@@ -6,7 +6,13 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-foreach="o.move_line_ids_without_package" t-as="product">
                         <t t-set="new_qty" t-value="0"/>
-                        <t t-foreach="product.pallet" t-as="product_pallet">
+                        <t t-if="product.No_of_lose_pallet &gt; 0">
+                            <t t-set="total_pallets" t-value="product.pallet + 1"/>
+                        </t>
+                        <t t-else="">
+                            <t t-set="total_pallets" t-value="product.pallet"/>
+                        </t>
+                        <t t-foreach="total_pallets" t-as="product_pallet">
                             <t t-set="qty_curr" t-value="product.No_of_carton * product.No_of_pcs"/>
                             <t t-set="new_qty" t-value="new_qty + qty_curr"/>
                             <t t-call="web.basic_layout">
@@ -124,9 +130,16 @@
                                                         <td style="width: 50%">
                                                             <div>QUANTITY :</div>
                                                             <t t-if="product_pallet_last">
-                                                                <span style="font-size: 24pt;"
-                                                                      t-esc="'%.0f'%(abs(product.qty_done - new_qty))"/>
-                                                                <span style="font-size: 24pt;">pcs</span>
+                                                                <t t-if="product.No_of_lose_pallet &gt; 0">
+                                                                    <span style="font-size: 24pt;"
+                                                                          t-esc="'%.0f'%product.No_of_lose_pallet"/>
+                                                                    <span style="font-size: 24pt;">pcs</span>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <span style="font-size: 24pt;"
+                                                                          t-esc="'%.0f'%(qty_curr * product.pallet)"/>
+                                                                    <span style="font-size: 24pt;">pcs</span>
+                                                                </t>
                                                             </t>
                                                             <t t-else="">
                                                                 <span style="font-size: 24pt;" t-esc="'%.0f'%qty_curr"/>

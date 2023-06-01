@@ -1,4 +1,5 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class StockMoveLineNasr(models.Model):
@@ -8,7 +9,20 @@ class StockMoveLineNasr(models.Model):
     delivery_date = fields.Datetime("Delivery Date", compute='_compute_delivery_date')
     No_of_carton = fields.Integer(string="No. of Carton")
     No_of_pcs = fields.Integer(string="No. of Pcs.")
+    No_of_lose_pallet = fields.Integer(string="No. of Lose Pallet")
     job_ticket_id = fields.Many2one('mrp.production', string='Job Ticket', compute='_compute_job_ticket_id')
+
+    @api.constrains('pallet', 'No_of_carton', 'No_of_pcs', 'No_of_lose_pallet')
+    def setconstrainsforall(self):
+        for rec in self:
+            if rec.pallet < 0 or rec.No_of_carton < 0 or rec.No_of_pcs < 0 or rec.No_of_lose_pallet < 0:
+                raise ValidationError(
+                    _("Invalid number, numbers must be positive."))
+
+    @api.onchange('No_of_carton', 'No_of_pcs', 'No_of_lose_pallet', 'pallet')
+    def compute_qty_done(self):
+        for rec in self:
+            rec.qty_done = (rec.pallet * rec.No_of_carton * rec.No_of_pcs) + rec.No_of_lose_pallet
 
     def copy(self, default=None):
         if default is None:

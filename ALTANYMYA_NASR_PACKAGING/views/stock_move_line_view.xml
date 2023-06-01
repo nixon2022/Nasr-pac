@@ -10,6 +10,7 @@
                 <field name="pallet"/>
                 <field name="No_of_carton"/>
                 <field name="No_of_pcs"/>
+                <field name="No_of_lose_pallet"/>
                 <field name="qty_done"/>
             </xpath>
         </xpath>

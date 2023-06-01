@@ -40,6 +40,7 @@
                 <field name="job_ticket_id"/>
                 <field name="No_of_carton"/>
                 <field name="No_of_pcs"/>
+                <field name="No_of_lose_pallet"/>
                 <field name="delivery_date"/>
             </xpath>
         </field>

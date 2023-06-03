@@ -137,7 +137,7 @@
                                                                 </t>
                                                                 <t t-else="">
                                                                     <span style="font-size: 24pt;"
-                                                                          t-esc="'%.0f'%(qty_curr * product.pallet)"/>
+                                                                          t-esc="'%.0f'%(qty_curr)"/>
                                                                     <span style="font-size: 24pt;">pcs</span>
                                                                 </t>
                                                             </t>

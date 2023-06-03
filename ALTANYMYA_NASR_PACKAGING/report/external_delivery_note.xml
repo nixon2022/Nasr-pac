@@ -159,14 +159,14 @@
                                                 <td style="border-top: 1px solid black; border-left: 1px solid black;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].pallet and o.move_line_ids_without_package[iterations - 2].No_of_carton">
                                                         <t t-set="carton"
-                                                           t-value="o.move_line_ids_without_package[iterations - 2].No_of_carton / o.move_line_ids_without_package[iterations - 2].pallet"/>
+                                                           t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_carton) + str('/') + str(o.move_line_ids_without_package[iterations - 2].pallet)"/>
                                                         <t t-esc="carton"/>
                                                     </t>
                                                 </td>
                                                 <td style="border-top: 1px solid black; border-left: 1px solid black;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].No_of_pcs and o.move_line_ids_without_package[iterations - 2].No_of_carton">
                                                         <t t-set="pcs"
-                                                           t-value="o.move_line_ids_without_package[iterations - 2].No_of_pcs / o.move_line_ids_without_package[iterations - 2].No_of_carton"/>
+                                                           t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_pcs) + str('/') + str(o.move_line_ids_without_package[iterations - 2].No_of_carton)"/>
                                                         <t t-esc="pcs"/>
                                                     </t>
                                                 </td>

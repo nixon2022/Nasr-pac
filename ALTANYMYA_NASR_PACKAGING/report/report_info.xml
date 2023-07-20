@@ -60,6 +60,16 @@
         <field name="binding_type">report</field>
     </record>
 
+    <record id="sale_quotation_report" model="ir.actions.report">
+        <field name="name">Sale Quotation</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ALTANYMYA_NASR_PACKAGING.nasrpack_sale_quotation</field>
+        <field name="report_file">ALTANYMYA_NASR_PACKAGING.nasrpack_sale_quotation</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
     <record id="mic_invoice_report" model="ir.actions.report">
         <field name="name">MIC Invoice</field>
         <field name="model">account.move</field>

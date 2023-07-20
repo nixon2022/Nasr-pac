@@ -6,7 +6,9 @@
     'category': 'Inventory/Purchase',
     'depends': ['purchase'],
     'data': [
+        'data/data.xml',
         'views/purchase_form_view.xml',
+        'views/res_partner.xml',
         'report/report_info.xml',
         'report/purchase_nasr_report.xml',
     ],

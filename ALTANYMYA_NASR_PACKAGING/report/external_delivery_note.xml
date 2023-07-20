@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="ALTANYMYA_NASR_PACKAGING.nasr_report_external_delivery_note_id">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <t t-set="iterations" t-value="1"/>
+                        <t t-set="total" t-value="0"/>
+                        <!--<t t-esc="len(o.move_line_ids_without_package)"/>-->
+                        <t t-if="int(len(o.move_line_ids_without_package) % 4) == 0">
+                            <t t-set="pages_to_print" t-value="1"/>
+                        </t>
+                        <t t-else="">
+                            <t t-set="pages_to_print" t-value="int(len(o.move_line_ids_without_package) / 4) + 1"/>
+                        </t>
+                        <t t-foreach="range(pages_to_print)" t-as="lines">
+                            <div class="page" dir="LTR" style="font-size: 11pt; font-weight: bold; width:100%">
+
+                                <center style="padding-bottom: 50px; font-size: 18pt; color: #317ec9; font-weight: normal;">
+                                    DELIVERY NOTE
+                                </center>
+                                <div style="display: inline-block; width: 100%;">
+                                    <div style="float: right; text-align: right; width: 100%;">
+                                        DATE:
+                                        <t t-if="o.date_done">
+                                            <span t-esc="o.date_done.strftime('%d/%m/%Y')"/>
+                                        </t>
+                                    </div>
+                                    <div style="float: right; text-align: right; width: 100%;">
+                                        DELIVERY NOTE NO:
+                                        <span t-field="o.name"/>
+                                    </div>
+                                </div>
+
+                                <table class="table table-borderless" style="border: 0px; width:100%;">
+                                    <tr>
+                                        <td style="width: 50%; text-align: left; border-top: 5px solid #317ec9; border-bottom: 5px solid #317ec9;">
+                                            NASRPAC Packaging &amp; Printing Factory co.
+                                            <br/>
+                                            <div style="font-weight: normal;">
+                                                P.O. Box 12328, Jeddah 21473 - Saudi Arabia
+                                                <br/>
+                                                Tel: +966 (12) 6117280 / 6117281 Fax: 6938407
+                                                <br/>
+                                                C.R. 4030012859
+                                                <br/>
+                                                Email: mail@nasrpac.com
+                                                <br/>
+                                            </div>
+                                        </td>
+                                        <td style="width: 15%;"/>
+                                        <td style="width: 35%; padding-top: 20px; text-align: right; border-top: 5px solid #317ec9; border-bottom: 5px solid #317ec9;">
+                                            <!--<div style="padding: 2px; background: #317ec9;"/>-->
+                                            Deliver To:
+                                            <span t-field="o.partner_id"/>
+                                            <br/>
+                                            <t t-if="o.sale_order_id">
+                                                <div t-field="o.sale_order_id.partner_id.company_new_field"/>
+                                            </t>
+                                            <t t-else=" ">
+                                                <div t-field="o.sale_id.partner_id.company_new_field"/>
+                                            </t>
+                                            <t t-if="o.sale_order_id">
+                                                <div t-field="o.sale_order_id.partner_id.street"/>
+                                            </t>
+                                            <t t-else=" ">
+                                                <div t-field="o.sale_id.partner_id.street"/>
+                                            </t>
+                                            <div t-field="o.partner_id.city"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br/>
+                                            P.O.#:
+                                            <t t-if="o.sale_order_id">
+                                                <span t-field="o.sale_order_id.client_order_ref"/>
+                                            </t>
+                                            <t t-else=" ">
+                                                <span t-field="o.sale_id.client_order_ref"/>
+                                            </t>
+                                        </td>
+                                        <td/>
+                                        <td style="text-align: right;">
+                                            <br/>
+                                            SO.NO#:
+                                            <t t-if="o.sale_order_id">
+                                                <span t-field="o.sale_order_id.name"/>
+                                            </t>
+                                            <t t-else=" ">
+                                                <span t-field="o.sale_id.name"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table class="table table-borderless table-sm"
+                                       style="font-weight: normal; text-align: center; margin-top: 0px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 5px; border: 1px solid #317ec9; width:100%">
+                                    <thead>
+                                        <tr style="background: #357ec9; color: white;">
+                                            <th style="border-right: 1px solid #317ec9;">
+                                                SN#
+                                            </th>
+                                            <th style="width: 20%; border-right: 1px solid #317ec9;">
+                                                Job ticket No
+                                            </th>
+                                            <th style="width: 15%; border-right: 1px solid #317ec9;">
+                                                Product Description
+                                            </th>
+                                            <th style="width: 10%; border-right: 1px solid #317ec9;">
+                                                Lot No.
+                                            </th>
+                                            <th style="width: 10%; border-right: 1px solid #317ec9;">
+                                                No. of
+                                                <br/>
+                                                Pallets
+                                            </th>
+                                            <th style="width: 10%; border-right: 1px solid #317ec9;">
+                                                No. of
+                                                <br/>
+                                                Lose Pallet
+                                            </th>
+                                            <th style="width: 10%; border-right: 1px solid #317ec9;">
+                                                No. of Carton/
+                                                <br/>
+                                                Pallet
+                                            </th>
+                                            <th style="width: 10%; border-right: 1px solid #317ec9;">
+                                                No.<br/>Pcs./Carton
+                                            </th>
+                                            <th style="width: 10%;">
+                                                Total Qty
+                                            </th>
+                                        </tr>
+                                    </thead>
+
+                                    <t t-foreach="range(4)" t-as="line">
+                                        <t t-if="iterations &gt; int(len(o.move_line_ids_without_package))"/>
+                                        <t t-else="">
+                                            <tr style="font-weight: normal;">
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <span t-esc="iterations"/>
+                                                    <t t-set="iterations" t-value="iterations + 1"/>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].job_ticket_id.name"/>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].product_id"/>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].lot_id"/>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].pallet"/>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].No_of_lose_pallet"/>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <t t-if="o.move_line_ids_without_package[iterations - 2].pallet and o.move_line_ids_without_package[iterations - 2].No_of_carton">
+                                                        <t t-set="carton"
+                                                           t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_carton) + str('/') + str(o.move_line_ids_without_package[iterations - 2].pallet)"/>
+                                                        <t t-esc="carton"/>
+                                                    </t>
+                                                </td>
+                                                <td style="border-right: 1px solid #317ec9;">
+                                                    <t t-if="o.move_line_ids_without_package[iterations - 2].No_of_pcs and o.move_line_ids_without_package[iterations - 2].No_of_carton">
+                                                        <t t-set="pcs"
+                                                           t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_pcs) + str('/') + str(o.move_line_ids_without_package[iterations - 2].No_of_carton)"/>
+                                                        <t t-esc="pcs"/>
+                                                    </t>
+                                                </td>
+                                                <td>
+                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].qty_done"/>
+                                                    <t t-set="total"
+                                                       t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </table>
+
+
+                                <div style="width: 100%; text-align: right;">
+                                    TOTAL QTY &#160; &#160; &#160; &#160; &#160;
+                                    <span t-esc="total"/>
+                                </div>
+                                <table class="table table-borderless"
+                                       style="font-size: 11pt;font-weight: normal; width:100%;">
+                                    <tr>
+                                        <td style="text-align: left; width:70%;"/>
+                                        <td style="text-align: left; width:30%;">
+                                            <div>
+                                                Plate no.:
+                                                <span t-field="o.plate_number"/>
+                                            </div>
+                                            <div>
+                                                Driver:
+                                                <span t-field="o.driver"/>
+                                            </div>
+                                            <div>
+                                                Mobile No.:
+                                                <span t-field="o.mobile_number"/>
+                                            </div>
+                                            <div>
+                                                Transporter:
+                                                <span t-field="o.transporter"/>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; width:70%;">
+                                            <div>
+                                                Remarks:
+                                            </div>
+                                            <div t-field="o.remarks"/>
+                                        </td>
+                                        <td style="text-align: left; width:30%;"/>
+                                    </tr>
+                                </table>
+
+                                <div class="footer o_standard_footer">
+                                    <center style="color: #9c2968;">
+                                        <div style="color: #980000;">
+                                            ------------------------------------------------------------------------------------------------------------------
+                                        </div>
+                                        Goods received in accordance with order to pay as per payment term
+                                        <br/>
+                                        البضاعة المستلمة مطابقة للمواصفات ونتعهد بدفع القيمة عند إستحقاق الفاتورة
+                                    </center>
+                                    <div class="row" style="report_footer_style">
+                                        <div style="width: 100%;">
+                                            <table class="table table-borderless"
+                                                   style="font-weight: normal; width:100%;">
+                                                <tr>
+                                                    <td style="text-align: left; width:50%;">
+                                                        <div>
+                                                            Issued by:
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: right; width:50%;">
+                                                        <div>
+                                                            Received by:
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="page-break-after:always;"/>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

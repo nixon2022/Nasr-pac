@@ -15,7 +15,7 @@
                             <t t-set="pages_to_print" t-value="int(len(o.move_line_ids_without_package) / 4) + 1"/>
                         </t>
                         <t t-foreach="range(pages_to_print)" t-as="lines">
-                            <div class="page" dir="LTR" style="font-size: 11pt; font-weight: bold; width:100%">
+                            <div class="page" dir="LTR" style="font-family: arial; font-size: 11pt; font-weight: bold; width:100%">
 
                                 <center style="padding-bottom: 50px; font-size: 18pt; color: #317ec9; font-weight: normal;">
                                     DELIVERY NOTE
@@ -95,12 +95,11 @@
                                     </tr>
                                 </table>
 
-                                <table class="table table-borderless table-sm"
-                                       style="font-weight: normal; text-align: center; margin-top: 0px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 5px; border: 1px solid #317ec9; width:100%">
+                                <table class="table table-borderless table-sm" style="font-weight: normal; text-align: center; margin-top: 0px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 5px; border: 1px solid #317ec9; width:100%">
                                     <thead>
                                         <tr style="background: #357ec9; color: white;">
                                             <th style="border-right: 1px solid #317ec9;">
-                                                SN#
+                                                SN
                                             </th>
                                             <th style="width: 20%; border-right: 1px solid #317ec9;">
                                                 Job ticket No
@@ -160,22 +159,19 @@
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].pallet and o.move_line_ids_without_package[iterations - 2].No_of_carton">
-                                                        <t t-set="carton"
-                                                           t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_carton) + str('/') + str(o.move_line_ids_without_package[iterations - 2].pallet)"/>
+                                                        <t t-set="carton" t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_carton) + str('/') + str(o.move_line_ids_without_package[iterations - 2].pallet)"/>
                                                         <t t-esc="carton"/>
                                                     </t>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].No_of_pcs and o.move_line_ids_without_package[iterations - 2].No_of_carton">
-                                                        <t t-set="pcs"
-                                                           t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_pcs) + str('/') + str(o.move_line_ids_without_package[iterations - 2].No_of_carton)"/>
+                                                        <t t-set="pcs" t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_pcs) + str('/') + str(o.move_line_ids_without_package[iterations - 2].No_of_carton)"/>
                                                         <t t-esc="pcs"/>
                                                     </t>
                                                 </td>
                                                 <td>
                                                     <span t-field="o.move_line_ids_without_package[iterations - 2].qty_done"/>
-                                                    <t t-set="total"
-                                                       t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
+                                                    <t t-set="total" t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
                                                 </td>
                                             </tr>
                                         </t>
@@ -184,11 +180,10 @@
 
 
                                 <div style="width: 100%; text-align: right;">
-                                    TOTAL QTY &#160; &#160; &#160; &#160; &#160;
+                                    TOTAL QTY          
                                     <span t-esc="total"/>
                                 </div>
-                                <table class="table table-borderless"
-                                       style="font-size: 11pt;font-weight: normal; width:100%;">
+                                <table class="table table-borderless" style="font-size: 11pt;font-weight: normal; width:100%;">
                                     <tr>
                                         <td style="text-align: left; width:70%;"/>
                                         <td style="text-align: left; width:30%;">
@@ -232,8 +227,7 @@
                                     </center>
                                     <div class="row" style="report_footer_style">
                                         <div style="width: 100%;">
-                                            <table class="table table-borderless"
-                                                   style="font-weight: normal; width:100%;">
+                                            <table class="table table-borderless" style="font-weight: normal; width:100%;">
                                                 <tr>
                                                     <td style="text-align: left; width:50%;">
                                                         <div>

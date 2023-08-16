@@ -53,6 +53,7 @@
                                         <td style="width: 35%; padding-top: 20px; text-align: right; border-top: 5px solid #317ec9; border-bottom: 5px solid #317ec9;">
                                             <!--<div style="padding: 2px; background: #317ec9;"/>-->
                                             Deliver To:
+                                            <div style="font-weight: normal;">
                                             <span t-field="o.partner_id"/>
                                             <br/>
                                             <t t-if="o.sale_order_id">
@@ -68,6 +69,7 @@
                                                 <div t-field="o.sale_id.partner_id.street"/>
                                             </t>
                                             <div t-field="o.partner_id.city"/>
+                                            </div>
                                         </td>
                                     </tr>
                                     <tr>
@@ -170,7 +172,7 @@
                                                     </t>
                                                 </td>
                                                 <td>
-                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].qty_done"/>
+                                                    <span t-esc="'%.0f'%o.move_line_ids_without_package[iterations - 2].qty_done"/>
                                                     <t t-set="total" t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
                                                 </td>
                                             </tr>
@@ -181,7 +183,7 @@
 
                                 <div style="width: 100%; text-align: right;">
                                     TOTAL QTY          
-                                    <span t-esc="total"/>
+                                    <span t-esc="'%.0f'%total"/>
                                 </div>
                                 <table class="table table-borderless" style="font-size: 11pt;font-weight: normal; width:100%;">
                                     <tr>

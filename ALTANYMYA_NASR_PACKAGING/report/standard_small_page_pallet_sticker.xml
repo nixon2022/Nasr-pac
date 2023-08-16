@@ -80,7 +80,7 @@
                                                             Pack Qty
                                                         </td>
                                                         <td colspan="1" style="border-bottom: 1px solid black;">
-                                                            <span t-field="product.qty_done"/>
+                                                            <span t-esc="'%.0f'%product.qty_done"/>
                                                         </td>
                                                         <td colspan="1"
                                                             style="border-left: 1px solid black; border-bottom: 1px solid black;">

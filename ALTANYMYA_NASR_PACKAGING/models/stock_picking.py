@@ -18,18 +18,25 @@ class StockPickingNasr(models.Model):
 
     def _compute_lot_id(self):
         for rec in self:
+            rec.lot_ids = None
             if rec.group_id and rec.partial_delivery:
-                lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
-                rec.lot_id_name = lot_name
-                rec.lot_ids = None
-
+                if rec.location_dest_id.usage != 'customer':
+                    lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
+                    rec.lot_id_name = lot_name
+                else:
+                    move_ids = self.env['stock.move'].search([('origin', '=', rec.origin),
+                                                              ('location_dest_id.usage', '!=', 'customer'),
+                                                              ('group_id', '=', rec.group_id),
+                                                              ('state', '=', 'done'),
+                                                             ])
+                    if move_ids:
+                        for move in move_ids:
+                            lot_name = lot_name + ' NASP' + move.group_id.name[-7:] + rec.partial_delivery
+                            rec.lot_id_name = lot_name
+                    
             elif not rec.group_id and rec.partial_delivery:
                 lot_name = 'NASP' + rec.partial_delivery
                 rec.lot_id_name = lot_name
-                rec.lot_ids = None
-
-            else:
-                rec.lot_ids = None
 
     def button_validate(self):
         for rec in self:

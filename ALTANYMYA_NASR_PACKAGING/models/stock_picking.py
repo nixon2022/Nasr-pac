@@ -26,7 +26,7 @@ class StockPickingNasr(models.Model):
                 else:
                     move_ids = self.env['stock.move'].search([('origin', '=', rec.origin),
                                                               ('location_dest_id.usage', '!=', 'customer'),
-                                                              ('group_id', '=', rec.group_id),
+                                                              ('group_id', '=', rec.group_id.id),
                                                               ('state', '=', 'done'),
                                                              ])
                     if move_ids:

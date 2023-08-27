@@ -138,11 +138,11 @@
                                                 <span style="font-weight: normal; font-size: 10pt;" t-field="o.order_line[iterations - 2].product_id"/>
                                             </td>
                                             <td colspan="1">
-                                                <span style="font-weight: normal;" t-field="o.order_line[iterations - 2].product_qty"/>
+                                                <span style="font-weight: normal;" t-esc="'{:,.0f}'.format(o.order_line[iterations - 2].product_qty)"/>
                                                 <span style="font-weight: normal;" t-field="o.order_line[iterations - 2].product_uom"/>
                                             </td>
                                             <td colspan="1">
-                                                <span style="font-weight: normal;" t-field="o.order_line[iterations - 2].price_unit"/>
+                                                <span style="font-weight: normal;" t-esc="'{:,.2f}'.format(o.order_line[iterations - 2].price_unit)"/>
                                             </td>
                                             <td colspan="1">
                                                 <span style="font-weight: normal;" t-field="o.order_line[iterations - 2].price_subtotal"/>
@@ -174,11 +174,11 @@
                                     <div style="padding-left: 50px; padding-bottom: 5px;">
                                         <br/>
                                         <div style="float: left;">Subtotal</div>
-                                        <div style="font-weight: normal; text-align: right; float: right;" t-esc="str(o.company_id.currency_id.symbol) + ' ' + str(subtotal)"/>
+                                        <div style="font-weight: normal; text-align: right; float: right;" t-esc="str(o.company_id.currency_id.symbol) + '{:,.2f}'.format(subtotal)"/>
                                         <br/>
                                         <br/>
                                         <div style="float: left;">Taxes (%)</div>
-                                        <div style="font-weight: normal; text-align: right; float: right;" t-esc="str(o.company_id.currency_id.symbol) + ' ' + str(taxes)"/>
+                                        <div style="font-weight: normal; text-align: right; float: right;" t-esc="str(o.company_id.currency_id.symbol) + '{:,.2f}'.format(taxes)"/>
                                         <br/>
                                         <br/>
                                         <div style="float: left;">Total</div>

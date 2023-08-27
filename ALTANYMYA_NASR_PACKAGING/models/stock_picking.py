@@ -18,12 +18,12 @@ class StockPickingNasr(models.Model):
 
     def _compute_lot_id(self):
         for rec in self:
-            elif rec.group_id and rec.partial_delivery and rec.product_id.tracking != 'lot':
+            if rec.group_id and rec.partial_delivery:
                 lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
                 rec.lot_id_name = lot_name
                 rec.lot_ids = None
 
-            elif not rec.group_id and rec.partial_delivery and rec.product_id.tracking != 'lot':
+            elif not rec.group_id and rec.partial_delivery:
                 lot_name = 'NASP' + rec.partial_delivery
                 rec.lot_id_name = lot_name
                 rec.lot_ids = None

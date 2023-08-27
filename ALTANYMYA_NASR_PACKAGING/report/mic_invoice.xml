@@ -374,7 +374,7 @@
                                 <table class="table table-borderless"
                                        style="margin-top: -20px; border-bottom: 1px solid black; border-right: 1px solid black;  border-left: 1px solid black; width:100%;">
                                     <t t-if="len(o.invoice_line_ids) == iterations - 1">
-                                        <tr style="font-size: 9pt; font-weight: 800; line-height: 1;">
+                                        <tr style="font-size: 9pt; font-weight: 800; line-height: 0.95;">
                                             <td colspan="4">
                                                 <div>
                                                     Amount in word:

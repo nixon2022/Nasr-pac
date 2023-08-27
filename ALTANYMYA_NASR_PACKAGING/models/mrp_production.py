@@ -62,7 +62,7 @@ class MrpProductionNasr(models.Model):
         for rec in self:
             cut_width = float(rec.product_id.sheet_width) - float(rec.product_id.sheet_width_cut)
             cut_length = float(rec.product_id.sheet_length) - float(rec.product_id.sheet_length_cut)
-            rec.cut_size = str(cut_width) + " X " + str(cut_length)
+            rec.cut_size = '{:,}'.format(cut_width) + " X " + '{:,}'.format(cut_length)
 
     @api.depends('product_id')
     def _compute_sheet_size(self):
@@ -72,7 +72,7 @@ class MrpProductionNasr(models.Model):
     @api.depends('product_id')
     def _compute_board_gsm(self):
         for rec in self:
-            rec.board_gsm = str(rec.product_id.gsm_substance) + " " + str(rec.board)
+            rec.board_gsm = '{:,.2f}'.format(rec.product_id.gsm_substance) + " " + str(rec.board)
 
     @api.depends('product_id')
     def _compute_board(self):
@@ -82,7 +82,7 @@ class MrpProductionNasr(models.Model):
     @api.depends('product_id')
     def _compute_color_quality(self):
         for rec in self:
-            rec.color_quality = str(rec.product_id.color) + " + " + str(rec.product_id.coating)
+            rec.color_quality = '{:,.2f}'.format(rec.product_id.color) + " + " + str(rec.product_id.coating)
 
     @api.depends('product_id')
     def _compute_impression(self):

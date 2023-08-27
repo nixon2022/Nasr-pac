@@ -42,7 +42,7 @@
                                         </tr>
                                         <tr style="height:20%;">
                                             <td style="font-size: 24pt; border-bottom: 1px solid black;" colspan="2">
-                                                <span t-esc="'%.0f'%product.qty_done"/>
+                                                <span t-esc="'{:,}'.format(int(product.qty_done))"/>
                                                 <span>PCS</span>
                                             </td>
                                         </tr>

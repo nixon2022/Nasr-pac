@@ -45,14 +45,18 @@ class StockMoveLineNasr(models.Model):
                     lot_name = "NASP" + res['move_id'].picking_id.group_id.name[-7:] + res['move_id'].picking_id.partial_delivery
                     lot_exist = self.env['stock.production.lot'].search([('name', '=', lot_name)])
                     if not lot_exist:
+                        print('---------1')
                         lot_id = self.env['stock.production.lot'].create({
                             'name': lot_name,
                             'product_id': res['product_id'].id,
                             # 'product_qty': res['product_id'].product_qty,
                             'company_id': res['company_id'].id,
                         })
+                        print('---------2')
                         res['lot_id'] = lot_id
+                        print('---------3')
                     else:
+                        print('===========')
                         res['lot_id'] = lot_exist
         return res
 
@@ -60,6 +64,10 @@ class StockMoveLineNasr(models.Model):
     def _compute_job_ticket_id(self):
         for rec in self:
             rec.job_ticket_id = None
+            # print('hon', rec.picking_id.product_id, rec.picking_id.product_id.name, rec.product_id, rec.product_id.name)
+            # if rec.product_id == rec.picking_id.product_id:
+            #     rec.lot_id = rec.picking_id.lot_ids
+            # print('lhon')
             if rec.origin:
                 result = rec.env['mrp.production'].search([('name', '=', rec.picking_id.group_id.name)])
                 if result:

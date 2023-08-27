@@ -151,7 +151,7 @@
                                                     <span t-field="o.move_line_ids_without_package[iterations - 2].product_id"/>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
-                                                    <span t-field="o.move_line_ids_without_package[iterations - 2].lot_id"/>
+                                                    <span t-field="o.lot_id_name"/>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <span t-field="o.move_line_ids_without_package[iterations - 2].pallet"/>
@@ -161,18 +161,18 @@
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].pallet and o.move_line_ids_without_package[iterations - 2].No_of_carton">
-                                                        <t t-set="carton" t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_carton) + str('/') + str(o.move_line_ids_without_package[iterations - 2].pallet)"/>
+                                                        <t t-set="carton" t-value="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_carton)) + str('/') + '{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].pallet))"/>
                                                         <t t-esc="carton"/>
                                                     </t>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].No_of_pcs and o.move_line_ids_without_package[iterations - 2].No_of_carton">
-                                                        <t t-set="pcs" t-value="str(o.move_line_ids_without_package[iterations - 2].No_of_pcs) + str('/') + str(o.move_line_ids_without_package[iterations - 2].No_of_carton)"/>
+                                                        <t t-set="pcs" t-value="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_pcs)) + str('/') + '{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_carton))"/>
                                                         <t t-esc="pcs"/>
                                                     </t>
                                                 </td>
                                                 <td>
-                                                    <span t-esc="'%.0f'%o.move_line_ids_without_package[iterations - 2].qty_done"/>
+                                                    <span t-esc="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].qty_done))"/>
                                                     <t t-set="total" t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
                                                 </td>
                                             </tr>
@@ -183,7 +183,8 @@
 
                                 <div style="width: 100%; text-align: right;">
                                     TOTAL QTY          
-                                    <span t-esc="'%.0f'%total"/>
+<!--                                    <span t-esc="'%.0f'%total"/>-->
+                                    <span t-esc="'{:,}'.format(int(total))"/>
                                 </div>
                                 <table class="table table-borderless" style="font-size: 11pt;font-weight: normal; width:100%;">
                                     <tr>

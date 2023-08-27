@@ -13,6 +13,64 @@ class StockPickingNasr(models.Model):
     mobile_number = fields.Char(string='Mobile No.')
     transporter = fields.Many2one('res.partner', string='Transporter')
     remarks = fields.Html(string="Remarks")
+    lot_ids = fields.Many2one('stock.production.lot', string="Lot Serial/Number", compute="_compute_lot_id")
+    lot_id_name = fields.Char(string="Lot Serial/Number")
+
+    def _compute_lot_id(self):
+        for rec in self:
+
+            if rec.group_id and rec.partial_delivery and rec.product_id.tracking == 'lot':
+                lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
+                rec.lot_id_name = lot_name
+                lot_ids = self.env['stock.production.lot'].search([('name', '=', lot_name)])
+                qty_done = 0
+                if rec.move_line_ids_without_package:
+                    for line in rec.move_line_ids_without_package:
+                        qty_done += line.qty_done
+                if lot_ids:
+                    rec.lot_ids = lot_ids[0]
+                else:
+                    print('reached 0')
+                    rec.lot_ids = self.env['stock.production.lot'].create({
+                        'name': lot_name,
+                        'product_id': rec.product_id.id,
+                        'product_qty': qty_done,
+                        'company_id': self.env.company.id
+                    })
+                    print('reached 01')
+
+            elif not rec.group_id and rec.partial_delivery and rec.product_id.tracking == 'lot':
+                lot_name = 'NASP' + rec.partial_delivery
+                rec.lot_id_name = lot_name
+                lot_ids = self.env['stock.production.lot'].search([('name', '=', lot_name)])
+                qty_done = 0
+                if rec.move_line_ids_without_package:
+                    for line in rec.move_line_ids_without_package:
+                        qty_done += line.qty_done
+                if lot_ids:
+                    rec.lot_ids = lot_ids[0]
+                else:
+                    print('reached 1')
+                    rec.lot_ids = self.env['stock.production.lot'].create({
+                        'name': lot_name,
+                        'product_id': rec.product_id.id,
+                        'product_qty': qty_done,
+                        'company_id': self.env.company.id
+                    })
+                    print('reached 2')
+
+            elif rec.group_id and rec.partial_delivery and rec.product_id.tracking != 'lot':
+                lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
+                rec.lot_id_name = lot_name
+                rec.lot_ids = None
+
+            elif not rec.group_id and rec.partial_delivery and rec.product_id.tracking != 'lot':
+                lot_name = 'NASP' + rec.partial_delivery
+                rec.lot_id_name = lot_name
+                rec.lot_ids = None
+
+            else:
+                rec.lot_ids = None
 
     def button_validate(self):
         for rec in self:

@@ -173,12 +173,13 @@
                                                     <t t-if="o.order_line[iterations - 2].price_unit">
                                                         <t t-set="rate"
                                                            t-value="o.order_line[iterations - 2].price_unit * 1000"/>
-                                                        <span style="font-weight: normal;" t-esc="rate"/>
+                                                        <span style="font-weight: normal;" t-esc="'{:,.2f}'.format(rate)"/>
                                                     </t>
                                                 </td>
                                                 <td style="border-bottom: 1px solid #317ec9;">
-                                                    <span style="font-weight: normal;"
-                                                          t-field="o.order_line[iterations - 2].product_uom_qty"/>
+                                                    <span style="font-weight: normal;" t-esc="'{:,.0f}'.format(o.order_line[iterations - 2].product_uom_qty)"/>
+<!--                                                    <span style="font-weight: normal;"-->
+<!--                                                          t-field="o.order_line[iterations - 2].product_uom_qty"/>-->
                                                 </td>
                                                 <td style="border-bottom: 1px solid #317ec9;">
                                                     <t t-if="o.order_line[iterations - 2].delivery_date_sale_order_line">

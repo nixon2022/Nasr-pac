@@ -132,17 +132,17 @@
                                                             <t t-if="product_pallet_last">
                                                                 <t t-if="product.No_of_lose_pallet &gt; 0">
                                                                     <span style="font-size: 24pt;"
-                                                                          t-esc="'%.0f'%product.No_of_lose_pallet"/>
+                                                                          t-esc="'{:,}'.format(int(product.No_of_lose_pallet))"/>
                                                                     <span style="font-size: 24pt;">pcs</span>
                                                                 </t>
                                                                 <t t-else="">
                                                                     <span style="font-size: 24pt;"
-                                                                          t-esc="'%.0f'%(qty_curr)"/>
+                                                                          t-esc="'{:,}'.format(int(qty_curr))"/>
                                                                     <span style="font-size: 24pt;">pcs</span>
                                                                 </t>
                                                             </t>
                                                             <t t-else="">
-                                                                <span style="font-size: 24pt;" t-esc="'%.0f'%qty_curr"/>
+                                                                <span style="font-size: 24pt;" t-esc="'{:,}'.format(int(qty_curr))"/>
                                                                 <span style="font-size: 24pt;">pcs</span>
                                                             </t>
 

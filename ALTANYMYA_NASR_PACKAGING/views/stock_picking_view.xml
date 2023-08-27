@@ -6,6 +6,8 @@
         <field name="inherit_id" ref="stock.view_picking_form"/>
         <field name="arch" type="xml">
             <field name="origin" position="after">
+                <field name="lot_ids" invisible="1"/>
+                <field name="lot_id_name" invisible="1"/>
                 <field name="random_unique_number" invisible="1"/>
                 <field name="partial_delivery" invisible="1"/>
                 <field name="sale_order_id" invisible="1"/>

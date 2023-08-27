@@ -168,7 +168,7 @@
                                         <td>
                                             <t t-if="o.order_line[iterations - 2].price_unit">
                                                 <t t-set="rate" t-value="o.order_line[iterations - 2].price_unit * 1000"/>
-                                                <span style="font-weight: normal;" t-esc="str(rate) + ' ' + str(o.company_id.currency_id.symbol)"/>
+                                                <span style="font-weight: normal;" t-esc="'{:,.2f}'.format(rate) + str(o.company_id.currency_id.symbol)"/>
                                             </t>
                                         </td>
                                         <td>

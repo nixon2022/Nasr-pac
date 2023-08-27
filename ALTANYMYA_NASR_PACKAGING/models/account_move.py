@@ -19,8 +19,9 @@ class AcountMoveNasr(models.Model):
                                                                ('location_dest_id.usage', '=', 'customer')])
                 print('del', deliveries)
                 for delivery in deliveries:
-                    if delivery.date_done.date() == rec.l10n_sa_delivery_date:
-                        rec.delivery_id = delivery
+                    if delivery.date_done:
+                        if delivery.date_done.date() == rec.l10n_sa_delivery_date:
+                            rec.delivery_id = delivery
                 # for delivery in deliveries:
                 #     if delivery.location_dest_id.usage == 'customer':
                 

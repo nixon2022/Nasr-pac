@@ -27,11 +27,12 @@ class StockPickingNasr(models.Model):
                     move_ids = self.env['stock.move'].search([('origin', '=', rec.origin),
                                                               ('location_dest_id.usage', '!=', 'customer'),
                                                               ('state', '=', 'done'),
+                                                              ('group_id', '!=', rec.group_id.id),
                                                              ])
                     if move_ids:
                         
                         for move in move_ids:
-                            lot_name = 'NASP' + move.group_id.name[-7:] + rec.partial_delivery
+                            lot_name = 'NASP' + move.group_id.name[-7:] + rec.partial_delivery + ', '
                             rec.lot_id_name += lot_name
                     
             elif not rec.group_id and rec.partial_delivery:

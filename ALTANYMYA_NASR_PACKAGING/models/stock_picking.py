@@ -18,47 +18,6 @@ class StockPickingNasr(models.Model):
 
     def _compute_lot_id(self):
         for rec in self:
-
-            if rec.group_id and rec.partial_delivery and rec.product_id.tracking == 'lot':
-                lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
-                rec.lot_id_name = lot_name
-                lot_ids = self.env['stock.production.lot'].search([('name', '=', lot_name)])
-                qty_done = 0
-                if rec.move_line_ids_without_package:
-                    for line in rec.move_line_ids_without_package:
-                        qty_done += line.qty_done
-                if lot_ids:
-                    rec.lot_ids = lot_ids[0]
-                else:
-                    print('reached 0')
-                    rec.lot_ids = self.env['stock.production.lot'].create({
-                        'name': lot_name,
-                        'product_id': rec.product_id.id,
-                        'product_qty': qty_done,
-                        'company_id': self.env.company.id
-                    })
-                    print('reached 01')
-
-            elif not rec.group_id and rec.partial_delivery and rec.product_id.tracking == 'lot':
-                lot_name = 'NASP' + rec.partial_delivery
-                rec.lot_id_name = lot_name
-                lot_ids = self.env['stock.production.lot'].search([('name', '=', lot_name)])
-                qty_done = 0
-                if rec.move_line_ids_without_package:
-                    for line in rec.move_line_ids_without_package:
-                        qty_done += line.qty_done
-                if lot_ids:
-                    rec.lot_ids = lot_ids[0]
-                else:
-                    print('reached 1')
-                    rec.lot_ids = self.env['stock.production.lot'].create({
-                        'name': lot_name,
-                        'product_id': rec.product_id.id,
-                        'product_qty': qty_done,
-                        'company_id': self.env.company.id
-                    })
-                    print('reached 2')
-
             elif rec.group_id and rec.partial_delivery and rec.product_id.tracking != 'lot':
                 lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
                 rec.lot_id_name = lot_name

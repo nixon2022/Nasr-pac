@@ -16,7 +16,7 @@ class AcountMoveNasr(models.Model):
             rec.delivery_id = None
             if rec.invoice_origin:
                 deliveries = self.env['stock.picking'].search([('origin', '=', rec.invoice_origin),
-                                                               ('product_id', '=', rec.product_id.id),
+                                                               ('date_done', '=', rec.l10n_delivery_date),
                                                                ('location_dest_id.usage', '=', 'customer')])
                 print('del', deliveries)
                 # for delivery in deliveries:

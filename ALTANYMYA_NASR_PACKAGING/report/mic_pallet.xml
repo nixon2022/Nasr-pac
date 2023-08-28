@@ -132,17 +132,17 @@
                                                             <t t-if="product_pallet_last">
                                                                 <t t-if="product.No_of_lose_pallet &gt; 0">
                                                                     <span style="font-size: 24pt;"
-                                                                          t-esc="'%.0f'%product.No_of_lose_pallet"/>
+                                                                          t-esc="'{:,}'.format(int(product.No_of_lose_pallet))"/>
                                                                     <span style="font-size: 24pt;">pcs</span>
                                                                 </t>
                                                                 <t t-else="">
                                                                     <span style="font-size: 24pt;"
-                                                                          t-esc="'%.0f'%(qty_curr * product.pallet)"/>
+                                                                          t-esc="'{:,}'.format(int(qty_curr))"/>
                                                                     <span style="font-size: 24pt;">pcs</span>
                                                                 </t>
                                                             </t>
                                                             <t t-else="">
-                                                                <span style="font-size: 24pt;" t-esc="'%.0f'%qty_curr"/>
+                                                                <span style="font-size: 24pt;" t-esc="'{:,}'.format(int(qty_curr))"/>
                                                                 <span style="font-size: 24pt;">pcs</span>
                                                             </t>
 
@@ -152,6 +152,8 @@
                                                     <tr>
                                                         <td style="border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; width: 50%">
                                                             <div>LOT#:</div>
+<!--                                                             <div style="font-size: 24pt;"
+                                                             t-field="o.lot_id_name"/> -->
                                                             <t t-if="last7digits and o.partial_delivery">
                                                                 <t t-set="lot"
                                                                    t-value="'NASP' + last7digits + o.partial_delivery"/>
@@ -170,8 +172,26 @@
                                                 </table>
                                                 <p style="margin-left: 100px;">ITEM+QUANTITY</p>
                                                 <t t-if="last8digits">
-                                                    <t t-set="merge_barcode"
-                                                       t-value="'(91)' + last8digits + '(37)' + str(product.qty_done)"/>
+                                                    <t t-if="product_pallet_last">
+                                                        <t t-if="product.No_of_lose_pallet &gt; 0">
+                                                            <t t-set="qty_bardcode_computation"
+                                                               t-value="'%.0f'%product.No_of_lose_pallet"/>
+                                                            <t t-set="merge_barcode"
+                                                               t-value="'(91)' + last8digits + '(37)' + str(qty_bardcode_computation)"/>
+                                                        </t>
+                                                        <t t-else="">
+                                                            <t t-set="qty_bardcode_computation"
+                                                               t-value="'%.0f'%(qty_curr)"/>
+                                                            <t t-set="merge_barcode"
+                                                               t-value="'(91)' + last8digits + '(37)' + str(qty_bardcode_computation)"/>
+                                                        </t>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <t t-set="qty_bardcode_computation" t-value="'%.0f'%qty_curr"/>
+                                                        <t t-set="merge_barcode"
+                                                           t-value="'(91)' + last8digits + '(37)' + str(qty_bardcode_computation)"/>
+                                                    </t>
+
                                                 </t>
                                                 <center>
                                                     <t t-if="merge_barcode">

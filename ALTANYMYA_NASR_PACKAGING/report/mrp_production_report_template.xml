@@ -90,7 +90,7 @@
                                             <tr style="text-align: center;">
                                                 <td colspan="1"
                                                     style="border-bottom: 1px solid black; border-right: 1px solid black;">
-                                                    <span style="font-weight: normal;" t-esc="'%.0f'%o.product_qty"/>
+                                                    <span style="font-weight: normal;" t-esc="'{:,}'.format(int(o.product_qty))"/>
                                                 </td>
                                                 <td colspan="1"
                                                     style="border-bottom: 1px solid black; border-right: 1px solid black;">
@@ -138,14 +138,15 @@
                                                 <td style="border-right: 1px solid black;">Sheet Size</td>
                                                 <td style="border-right: 1px solid black;">
                                                     <span style="font-weight: normal;"
-                                                          t-field="o.product_id.sheet_width"/>
+                                                          t-esc="'{:,}'.format(int(o.product_id.sheet_width))"/>
                                                     <span style="font-weight: normal;">X</span>
                                                     <span style="font-weight: normal;"
-                                                          t-field="o.product_id.sheet_length"/>
+                                                          t-esc="'{:,}'.format(int(o.product_id.sheet_length))"/>
                                                 </td>
                                                 <td style="border-right: 1px solid black;">Cut Size</td>
                                                 <td style="border-right: 1px solid black;">
-                                                    <span style="font-weight: normal;" t-field="o.cut_size"/>
+                                                    <span style="font-weight: normal;"
+                                                          t-field="o.cut_size"/>
                                                 </td>
                                                 <td colspan="1">Pack Qty.</td>
                                                 <td colspan="1">

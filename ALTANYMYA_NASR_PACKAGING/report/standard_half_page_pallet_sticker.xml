@@ -6,8 +6,7 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-foreach="o.move_line_ids_without_package" t-as="product">
                         <t t-call="web.basic_layout">
-                            <div class="page" dir="LTR"
-                                 style="font-family: Courier New; text-transform: uppercase; font-weight: bold; width:100%">
+                            <div class="page" dir="LTR" style="font-family: Courier New; text-transform: uppercase; font-weight: bold; width:100%">
                                 <t t-foreach="2" t-as="copies">
                                     <div class="oe_structure"/>
                                     <center>
@@ -15,15 +14,7 @@
                                     </center>
                                     <br/>
                                     <br/>
-                                    <table class="table table-borderless table-sm" style="text-align: center;
-                                    margin-top: -17px;
-                                    border-collapse: separate;
-                                    border-spacing: 0;
-                                    overflow: hidden;
-                                    border-radius: 10px;
-                                    border: 1px solid black;
-                                    height: 50%;
-                                    width: 100%">
+                                    <table class="table table-borderless table-sm" style="text-align: center;                                     margin-top: -17px;                                     border-collapse: separate;                                     border-spacing: 0;                                     overflow: hidden;                                     border-radius: 10px;                                     border: 1px solid black;                                     height: 50%;                                     width: 100%">
                                         <tr style="height:20%;">
                                             <td colspan="2" style="border-bottom: 1px solid black;">
                                                 <div style="line-height: 1; font-size: 32pt;">
@@ -41,24 +32,26 @@
                                             </td>
                                         </tr>
                                         <tr style="height:10%;">
-                                            <td colspan="2" style="border-bottom: 1px solid black;">
+                                            <td colspan="1" style="border-bottom: 1px solid black; text-align: left; width: 50%;">
+                                                <span style="font-weight: normal;">Job Ticket: </span>
+                                                <span t-field="product.job_ticket_id.name"/>
+                                            </td>
+                                            <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black; text-align: center; width: 50%;">
                                                 <span t-field="o.sale_order_id.client_order_ref"/>
                                             </td>
                                         </tr>
                                         <tr style="height:20%;">
                                             <td style="font-size: 24pt; border-bottom: 1px solid black;" colspan="2">
-                                                <span t-field="product.qty_done"/>
+                                                <span t-esc="'{:,}'.format(int(product.qty_done))"/>
                                                 <span>PCS</span>
                                             </td>
                                         </tr>
                                         <tr style="height:10%;">
-                                            <td colspan="1"
-                                                style="border-bottom: 1px solid black; text-transform: none; text-align: left">
+                                            <td colspan="1" style="border-bottom: 1px solid black; text-transform: none; text-align: left">
                                                 <span style="font-weight: normal;">Operators</span>
                                                 <span>Operator</span>
                                             </td>
-                                            <td colspan="1"
-                                                style="border-left: 1px solid black; border-bottom: 1px solid black; text-transform: none; text-align: left">
+                                            <td colspan="1" style="border-left: 1px solid black; border-bottom: 1px solid black; text-transform: none; text-align: left">
                                                 <span style="font-weight: normal;">Prod.Date</span>
                                                 <t t-if="o.date_done">
                                                     <span t-esc="o.date_done.strftime('%d/%m/%Y')"/>
@@ -67,8 +60,7 @@
                                         </tr>
                                         <tr style="height:20%;">
                                             <td colspan="2">
-                                                <span t-field="product.product_id.name"
-                                                      t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:250px;height:50px'}"/>
+                                                <span t-field="product.product_id.name" t-options="{'widget': 'barcode', 'width': 600, 'height': 100, 'img_style': 'width:250px;height:50px'}"/>
                                             </td>
                                         </tr>
                                     </table>

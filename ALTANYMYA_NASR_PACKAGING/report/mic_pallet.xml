@@ -152,9 +152,9 @@
                                                     <tr>
                                                         <td style="border-top: 1px solid black; border-bottom: 1px solid black; border-right: 1px solid black; width: 50%">
                                                             <div>LOT#:</div>
-                                                            <div style="font-size: 24pt;"
-                                                             t-field="o.lot_id_name"/>
-<!--                                                             <t t-if="last7digits and o.partial_delivery">
+<!--                                                             <div style="font-size: 24pt;"
+                                                             t-field="o.lot_id_name"/> -->
+                                                            <t t-if="last7digits and o.partial_delivery">
                                                                 <t t-set="lot"
                                                                    t-value="'NASP' + last7digits + o.partial_delivery"/>
                                                                 <span style="font-size: 24pt;" t-esc="lot"/>
@@ -162,7 +162,7 @@
                                                             <t t-if="not last7digits and o.partial_delivery">
                                                                 <t t-set="lot" t-value="'NPSA' + o.partial_delivery"/>
                                                                 <span style="font-size: 24pt;" t-esc="lot"/>
-                                                            </t> -->
+                                                            </t>
                                                         </td>
                                                         <td style="border-top: 1px solid black; border-bottom: 1px solid black; width: 50%">
                                                             <div>PALLET TYPE</div>

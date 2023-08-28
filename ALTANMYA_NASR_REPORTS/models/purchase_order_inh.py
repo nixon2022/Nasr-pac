@@ -2,16 +2,15 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models, tools, _
-import base64
 from num2words import num2words
 
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    Attention = fields.Char('Attention')
+    Attention = fields.Char('Shipment')
     Remarks = fields.Html('Remarks')
-    Type = fields.Char('Type')
+    Type = fields.Char('Ref')
 
     Via = fields.Char('Via')
     ETA = fields.Char('ETA')
@@ -27,14 +26,14 @@ class PurchaseOrder(models.Model):
     Date_print = fields.Datetime("date", compute='_get_value', store=True)
 
     total_price_words = fields.Char('Total Price in Words', compute='_get_value')
+    tracking_sequence = fields.Char(string='Tracking Number', required=True, copy=False, readonly=True,
+                           default=lambda self: _('New'))
 
-    # @api.depends('order_line.product_qty', 'order_line.product_uom_qty')
-    # def _get_Qty(self):
-    #     for rec in self:
-    #         mm = self.env['purchase.order.line'].search([('order_id', '=', rec.id)])
-    #         for qtt in mm:
-    #             rec.qty = str(qtt.product_qty) + " " + qtt.product_uom.name
-    #         print(" rec.qty", rec.qty)
+    @api.model
+    def create(self, vals):
+        if vals.get('tracking_sequence', _('New')) == ('New'):
+            vals['tracking_sequence'] = self.env['ir.sequence'].next_by_code('purchase.order.trackin') or _('New')
+        return super(PurchaseOrder, self).create(vals)
 
     @api.depends('order_line.product_qty', 'order_line.product_uom_qty')
     def _get_value(self):
@@ -49,8 +48,6 @@ class PurchaseOrder(models.Model):
             # order.total_price_words = currency and num2words(amount, to='currency', lang='en',
             #                                                  currency=currency.name).title() or ''
             # order.total_price_words = num2words(float(order.amount_total)).title()
-            print('vv order.total_price_words vv', order.total_price_words)
-            print("rder.Total_quantity_ordered", order.Total_quantity_ordered)
 
 
 class PurchaseOrderLine(models.Model):

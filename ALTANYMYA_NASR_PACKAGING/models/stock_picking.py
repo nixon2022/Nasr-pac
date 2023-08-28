@@ -24,7 +24,7 @@ class StockPickingNasr(models.Model):
                     lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
                     rec.lot_id_name = lot_name
                 else:
-                    move_ids = self.env['stock.move'].search([('origin', '=', rec.origin),
+                    move_ids = self.env['stock.picking'].search([('origin', '=', rec.origin),
                                                               ('location_dest_id.usage', '!=', 'customer'),
                                                               ('state', '=', 'done'),
                                                               ('group_id', '!=', rec.group_id.id),

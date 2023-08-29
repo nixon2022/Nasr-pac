@@ -25,7 +25,7 @@ class StockPickingNasr(models.Model):
                     lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
                     rec.lot_id_name = lot_name
                 else:
-                    if rec.state != 'done':
+                    if rec.state != 'done' and not rec.move_line_ids_without_package:
                         move_ids = self.env['stock.picking'].search([('origin', '=', rec.origin),
                                                                      ('location_dest_id.usage', '!=', 'customer'),
                                                                      ('location_dest_id.barcode', '=', 'STOCK2'),

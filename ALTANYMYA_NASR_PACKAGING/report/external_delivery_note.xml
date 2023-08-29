@@ -151,7 +151,14 @@
                                                     <span t-field="o.move_line_ids_without_package[iterations - 2].product_id"/>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
-                                                    <span t-field="o.lot_id_name"/>
+                                                    <td style="border-right: 1px solid #317ec9;">
+                                                        <t t-set="lot_name" t-value="o.lot_id_name.split(' ')"/>
+                                                        <t t-foreach="lot_name" t-as="lot">
+                                                            <t t-if="o.move_line_ids_without_package[iterations - 2].job_ticket_id.name[-7:] in lot">
+                                                                <span t-esc="lot"/>
+                                                            </t>
+                                                        </t>
+                                                    </td>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <span t-field="o.move_line_ids_without_package[iterations - 2].pallet"/>

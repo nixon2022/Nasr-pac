@@ -27,11 +27,12 @@ class StockPickingNasr(models.Model):
                 else:
                     if rec.state != 'done':
                         move_ids = self.env['stock.picking'].search([('origin', '=', rec.origin),
-                                                                  ('location_dest_id.usage', '!=', 'customer'),
-                                                                  ('state', '=', 'done'),
-                                                                  ('group_id', '!=', rec.group_id.id),
-                                                                  ('dispatched', '=', False)
-                                                                 ])
+                                                                     ('location_dest_id.usage', '!=', 'customer'),
+                                                                     ('location_dest_id.barcode', '=', 'STOCK2'),
+                                                                     ('state', '=', 'done'),
+                                                                     ('group_id', '!=', rec.group_id.id),
+                                                                     ('dispatched', '=', False)
+                                                                    ])
                         if move_ids:
                             # rec.lot_id_name = ''
                             for move in move_ids:

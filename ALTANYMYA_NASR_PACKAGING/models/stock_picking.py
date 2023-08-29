@@ -14,7 +14,7 @@ class StockPickingNasr(models.Model):
     transporter = fields.Many2one('res.partner', string='Transporter')
     remarks = fields.Html(string="Remarks")
     lot_ids = fields.Many2one('stock.production.lot', string="Lot Serial/Number", compute="_compute_lot_id")
-    lot_id_name = fields.Char(string="Lot Serial/Number")
+    lot_id_name = fields.Char(string="Lot Serial/Number", copy=False)
     dispatched = fields.Boolean(string="Dispatched")
 
     def _compute_lot_id(self):

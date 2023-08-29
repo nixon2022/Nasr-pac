@@ -42,6 +42,8 @@ class StockPickingNasr(models.Model):
                                 else:
                                     rec.lot_id_name = lot_name
                                 move.dispatched = True
+                    if rec.state == 'waiting':
+                        rec.lot_id_name = ''
                     
             elif not rec.group_id and rec.partial_delivery:
                 lot_name = 'NASP' + rec.partial_delivery

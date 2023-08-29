@@ -15,6 +15,7 @@ class StockPickingNasr(models.Model):
     remarks = fields.Html(string="Remarks")
     lot_ids = fields.Many2one('stock.production.lot', string="Lot Serial/Number", compute="_compute_lot_id")
     lot_id_name = fields.Char(string="Lot Serial/Number")
+    dispatched = fields.Boolean(string="Dispatched")
 
     def _compute_lot_id(self):
         for rec in self:
@@ -29,12 +30,14 @@ class StockPickingNasr(models.Model):
                                                                   ('location_dest_id.usage', '!=', 'customer'),
                                                                   ('state', '=', 'done'),
                                                                   ('group_id', '!=', rec.group_id.id),
+                                                                  ('dispatched', '=', False)
                                                                  ])
                         if move_ids:
                             rec.lot_id_name = ''
                             for move in move_ids:
                                 lot_name ='"' + 'NASP' + move.group_id.name[-7:] + move.partial_delivery + '" '
                                 rec.lot_id_name += lot_name
+                                move.dispatched = True
                     
             elif not rec.group_id and rec.partial_delivery:
                 lot_name = 'NASP' + rec.partial_delivery

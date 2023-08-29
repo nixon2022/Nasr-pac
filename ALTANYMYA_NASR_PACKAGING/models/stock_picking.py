@@ -14,7 +14,7 @@ class StockPickingNasr(models.Model):
     transporter = fields.Many2one('res.partner', string='Transporter')
     remarks = fields.Html(string="Remarks")
     lot_ids = fields.Many2one('stock.production.lot', string="Lot Serial/Number", compute="_compute_lot_id")
-    lot_id_name = fields.Char(string="Lot Serial/Number", default=" ")
+    lot_id_name = fields.Char(string="Lot Serial/Number")
     dispatched = fields.Boolean(string="Dispatched")
 
     def _compute_lot_id(self):
@@ -36,7 +36,10 @@ class StockPickingNasr(models.Model):
                             # rec.lot_id_name = ''
                             for move in move_ids:
                                 lot_name ='"' + 'NASP' + move.group_id.name[-7:] + move.partial_delivery + '" '
-                                rec.lot_id_name += lot_name
+                                if rec.lot_id_name:
+                                    rec.lot_id_name += lot_name
+                                else:
+                                    rec.lot_id_name = lot_name
                                 move.dispatched = True
                     
             elif not rec.group_id and rec.partial_delivery:

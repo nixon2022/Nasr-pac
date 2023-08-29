@@ -36,7 +36,7 @@ class StockPickingNasr(models.Model):
                         if move_ids:
                             # rec.lot_id_name = ''
                             for move in move_ids:
-                                lot_name ='"' + 'NASP' + move.group_id.name[-7:] + move.partial_delivery + '" '
+                                lot_name ='NASP' + move.group_id.name[-7:] + move.partial_delivery + ' '
                                 if rec.lot_id_name:
                                     rec.lot_id_name += lot_name
                                 else:

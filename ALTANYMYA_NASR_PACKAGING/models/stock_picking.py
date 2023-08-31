@@ -14,7 +14,8 @@ class StockPickingNasr(models.Model):
     transporter = fields.Many2one('res.partner', string='Transporter')
     remarks = fields.Html(string="Remarks")
     lot_ids = fields.Many2one('stock.production.lot', string="Lot Serial/Number", compute="_compute_lot_id")
-    lot_id_name = fields.Char(string="Lot Serial/Number")
+    lot_id_name = fields.Char(string="Lot Serial/Number", copy=False)
+    dispatched = fields.Boolean(string="Dispatched")
 
     def _compute_lot_id(self):
         for rec in self:
@@ -24,16 +25,25 @@ class StockPickingNasr(models.Model):
                     lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
                     rec.lot_id_name = lot_name
                 else:
-                    move_ids = self.env['stock.picking'].search([('origin', '=', rec.origin),
-                                                              ('location_dest_id.usage', '!=', 'customer'),
-                                                              ('state', '=', 'done'),
-                                                              ('group_id', '!=', rec.group_id.id),
-                                                             ])
-                    if move_ids:
+                    if rec.state == 'assigned':
+                        move_ids = self.env['stock.picking'].search([('origin', '=', rec.origin),
+                                                                     ('location_dest_id.usage', '!=', 'customer'),
+                                                                     ('location_dest_id.barcode', '=', 'STOCK2'),
+                                                                     ('state', '=', 'done'),
+                                                                     ('group_id', '!=', rec.group_id.id),
+                                                                     ('dispatched', '=', False)
+                                                                    ])
+                        if move_ids:
+                            # rec.lot_id_name = ''
+                            for move in move_ids:
+                                lot_name ='NASP' + move.group_id.name[-7:] + move.partial_delivery + ' '
+                                if rec.lot_id_name:
+                                    rec.lot_id_name += lot_name
+                                else:
+                                    rec.lot_id_name = lot_name
+                                move.dispatched = True
+                    if rec.state == 'waiting':
                         rec.lot_id_name = ''
-                        for move in move_ids:
-                            lot_name ='"' + 'NASP' + move.group_id.name[-7:] + move.partial_delivery + '" '
-                            rec.lot_id_name += lot_name
                     
             elif not rec.group_id and rec.partial_delivery:
                 lot_name = 'NASP' + rec.partial_delivery

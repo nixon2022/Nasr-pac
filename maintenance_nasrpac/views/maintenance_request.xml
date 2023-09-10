@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_equipment_request_form_inherit" model="ir.ui.view">
+        <field name="name">maintenance.request.inherited</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <field name='request_date' position="replace">
+                <field name="request_date1" readonly="True"/>
+            </field>
+
+            <field name='schedule_date' position="replace" >
+                <field name="schedule_date1" readonly="False" />
+            </field>
+
+            <field name="close_date" position="replace">
+                <field name="close_date1" readonly="False" attrs="{'invisible': [('done', '!=', True)]}"/>
+            </field>
+
+           <field name="email_cc" position="after">
+                <field name="done_time" attrs="{'invisible': [('done', '!=', True)]}" readonly="True"/>
+           </field>
+
+           <field name="done_time" position="after">
+                <field name="job_donetime"  attrs="{'invisible': [('done', '!=', True)]}" readonly="True"/>
+          </field>
+
+            <field name="job_donetime" position="after">
+                <field name="etft"/>
+            </field>
+        </field>
+    </record>
+
+
+
+    <record id="hr_equipment_request_inherit" model="ir.ui.view">
+        <field name="name">maintenance.request.inherited</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_tree"/>
+        <field name="arch" type="xml">
+            <field name='request_date' position="replace">
+                <field name="request_date1"/>
+            </field>
+        <field name="company_id" position="after">
+              <field name="etft"/>
+            </field>
+        </field>
+    </record>
+
+
+    <!--<how to add new field to existing kanban in odoo using inheritance >-->
+
+
+    <record id="hr_equipment_request_kanban" model="ir.ui.view">
+        <field name="name">maintenance.hr_equipment_request_view_kanban</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_kanban"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="etft"/>
+            </field>
+            <xpath expr="//div[hasclass('oe_kanban_content')]" position="after">
+                <field name="etft"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="hr_equipment_request_view_inherit_mrp" model="ir.ui.view">
+        <field name="name">maintenance.request.view.form.inherit.mrp</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='schedule_date1']" position="after">
+                <field name="expected_mtbf"/>
+                <field name="mtbf1"/>
+                <field name="mttr1"/>
+                <field name="estimated_next_failure1"/>
+                <field name="latest_failure_date1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

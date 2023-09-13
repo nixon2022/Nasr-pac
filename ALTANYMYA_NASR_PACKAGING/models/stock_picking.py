@@ -16,13 +16,14 @@ class StockPickingNasr(models.Model):
     lot_ids = fields.Many2one('stock.production.lot', string="Lot Serial/Number", compute="_compute_lot_id")
     lot_id_name = fields.Char(string="Lot Serial/Number", copy=False)
     dispatched = fields.Boolean(string="Dispatched")
+    invoiced = fields.Boolean(string="Invoiced")
 
     def _compute_lot_id(self):
         for rec in self:
             rec.lot_ids = None
             if rec.group_id and rec.partial_delivery:
                 if rec.location_dest_id.usage != 'customer':
-                    lot_name = 'NASP' + rec.group_id.name[-7:] + rec.partial_delivery
+                    lot_name = 'NPSA' + rec.group_id.name[-7:] + rec.partial_delivery
                     rec.lot_id_name = lot_name
                 else:
                     if rec.state == 'assigned':
@@ -36,7 +37,7 @@ class StockPickingNasr(models.Model):
                         if move_ids:
                             # rec.lot_id_name = ''
                             for move in move_ids:
-                                lot_name ='NASP' + move.group_id.name[-7:] + move.partial_delivery + ' '
+                                lot_name ='NPSA' + move.group_id.name[-7:] + move.partial_delivery + ' '
                                 if rec.lot_id_name:
                                     rec.lot_id_name += lot_name
                                 else:
@@ -46,7 +47,7 @@ class StockPickingNasr(models.Model):
                         rec.lot_id_name = ''
                     
             elif not rec.group_id and rec.partial_delivery:
-                lot_name = 'NASP' + rec.partial_delivery
+                lot_name = 'NPSA' + rec.partial_delivery
                 rec.lot_id_name = lot_name
 
     def button_validate(self):

@@ -42,7 +42,7 @@ class StockMoveLineNasr(models.Model):
         if res['move_id'].picking_id.group_id:
             if res['product_id'].tracking == 'lot':
                 if res['move_id'].picking_id.picking_type_id.generate_lot_id_nasr:
-                    lot_name = "NASP" + res['move_id'].picking_id.group_id.name[-7:] + res['move_id'].picking_id.partial_delivery
+                    lot_name = "NPSA" + res['move_id'].picking_id.group_id.name[-7:] + res['move_id'].picking_id.partial_delivery
                     lot_exist = self.env['stock.production.lot'].search([('name', '=', lot_name)])
                     if not lot_exist:
                         print('---------1')

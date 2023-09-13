@@ -156,7 +156,7 @@
                                                              t-field="o.lot_id_name"/> -->
                                                             <t t-if="last7digits and o.partial_delivery">
                                                                 <t t-set="lot"
-                                                                   t-value="'NASP' + last7digits + o.partial_delivery"/>
+                                                                   t-value="'NPSA' + last7digits + o.partial_delivery"/>
                                                                 <span style="font-size: 24pt;" t-esc="lot"/>
                                                             </t>
                                                             <t t-if="not last7digits and o.partial_delivery">

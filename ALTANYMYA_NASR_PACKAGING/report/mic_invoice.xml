@@ -68,8 +68,8 @@
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <tr style="font-weight: normal; text-align: center; line-height: 0.1">
+                                    <t t-if="len(o.delivery_ids) > 1">
+                                        <tr style="font-weight: normal; text-align: center; line-height: 1">
                                         <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
                                             <div t-field="o.name"/>
                                         </td>
@@ -77,7 +77,9 @@
                                             <div t-field="o.invoice_date"/>
                                         </td>
                                         <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
-                                            <div t-field="o.delivery_id"/>
+                                            <t t-foreach="o.delivery_ids" t-as="delivery">
+                                                <div t-field="delivery.name"/>
+                                            </t>
                                         </td>
                                         <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
                                             <div>
@@ -93,10 +95,47 @@
 
                                         <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
                                             <div>
-                                                <div t-field="o.delivery_id"/>
+                                                <t t-foreach="o.delivery_ids" t-as="delivery">
+                                                    <div t-field="delivery.name"/>
+                                                </t>
                                             </div>
                                         </td>
                                     </tr>
+                                    </t>
+                                    <t t-else=" ">
+                                        <tr style="font-weight: normal; text-align: center; line-height: 0.1">
+                                        <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
+                                            <div t-field="o.name"/>
+                                        </td>
+                                        <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
+                                            <div t-field="o.invoice_date"/>
+                                        </td>
+                                        <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
+                                            <t t-foreach="o.delivery_ids" t-as="delivery">
+                                                <div t-field="delivery.name"/>
+                                            </t>
+                                        </td>
+                                        <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
+                                            <div>
+                                                <div t-field="o.name"/>
+                                            </div>
+                                        </td>
+
+                                        <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
+                                            <div>
+                                                <div t-field="o.invoice_date"/>
+                                            </div>
+                                        </td>
+
+                                        <td colspan="1" style="border: 1px solid black; font-size: 8pt;">
+                                            <div>
+                                                <t t-foreach="o.delivery_ids" t-as="delivery">
+                                                    <div t-field="delivery.name"/>
+                                                </t>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </t>
                                     <tr style="border: 1px solid black; font-weight: normal;">
                                         <td colspan="3" style="border: 1px solid black;">
                                             <u style="font-weight: bold;">Supplier Details:</u>
@@ -247,8 +286,16 @@
                                                         <t t-set="iterations" t-value="iterations + 1"/>
                                                     </td>
                                                     <td style="width: 700px; border-right: 1px solid black; text-align: left;">
-
-                                                        <span t-field="o.invoice_line_ids[iterations - 2].name"/>
+                                                        <div t-field="o.invoice_line_ids[iterations - 2].name"/>
+                                                        PO Number #
+                                                        <t t-if="o.invoice_line_ids[iterations - 2].sale_line_ids">
+                                                            <span t-field="o.invoice_line_ids[iterations - 2].sale_line_ids[0].order_id.client_order_ref"/>
+                                                        </t>
+                                                        <t t-if="o.invoice_line_ids[iterations - 2].product_id.product_number">
+                                                            <br/>
+                                                            Product Number #
+                                                            <span t-field="o.invoice_line_ids[iterations - 2].product_id.product_number"/>
+                                                        </t>
                                                     </td>
                                                     <td style="border-right: 1px solid black;">
                                                         <t t-if="o.invoice_line_ids[iterations - 2].price_unit">
@@ -297,8 +344,16 @@
                                                         <t t-set="iterations" t-value="iterations + 1"/>
                                                     </td>
                                                     <td style="width: 700px; border-right: 1px solid black; text-align: left;">
-
-                                                        <span t-field="o.invoice_line_ids[iterations - 2].name"/>
+                                                        <div t-field="o.invoice_line_ids[iterations - 2].name"/>
+                                                        PO Number #
+                                                        <t t-if="o.invoice_line_ids[iterations - 2].sale_line_ids">
+                                                            <span t-field="o.invoice_line_ids[iterations - 2].sale_line_ids[0].order_id.client_order_ref"/>
+                                                        </t>
+                                                        <t t-if="o.invoice_line_ids[iterations - 2].product_id.product_number">
+                                                            <br/>
+                                                            Product Number #
+                                                            <span t-field="o.invoice_line_ids[iterations - 2].product_id.product_number"/>
+                                                        </t>
                                                     </td>
                                                     <td style="border-right: 1px solid black;">
                                                         <t t-if="o.invoice_line_ids[iterations - 2].price_unit">

@@ -8,24 +8,36 @@ class AcountMoveNasr(models.Model):
     Total_quantity_ordered = fields.Char(string="Total_quantity_ordered", compute='_get_value', store=True)
     total_price_words = fields.Char(string="Total Price in English Words", compute='_get_value')
     total_price_words_arabic = fields.Char(string="Total Price in Arabic Words", compute='_get_value')
-    delivery_id = fields.Many2one('stock.picking', compute="_compute_delivery_id")
+    delivery_ids = fields.Many2many('stock.picking')
     bank_details = fields.Html(string="Bank Details")
 
-    def _compute_delivery_id(self):
-        for rec in self:
-            rec.delivery_id = None
-            if rec.invoice_origin:
-                deliveries = self.env['stock.picking'].search([('origin', '=', rec.invoice_origin),
-                                                               ('location_dest_id.usage', '=', 'customer')])
-                print('del', deliveries)
-                for delivery in deliveries:
-                    if delivery.date_done:
-                        if delivery.date_done.date() == rec.l10n_sa_delivery_date:
-                            rec.delivery_id = delivery
-                # for delivery in deliveries:
-                #     if delivery.location_dest_id.usage == 'customer':
-                
+    @api.model
+    def create(self, vals_list):
+        res = super(AcountMoveNasr, self).create(vals_list)
+        deliveries = self.env['stock.picking'].search([('origin', '=', vals_list.get('invoice_origin')),
+                                                       ('location_dest_id.usage', '=', 'customer'),
+                                                       ('state', '=', 'done'),
+                                                       ('invoiced', '=', False)])
+        deliveries_list = []
+        for delivery in deliveries:
+            deliveries_list.append(delivery.id)
+            delivery.invoiced = True
+        res['delivery_ids'] = deliveries_list
+        return res
 
+    # def _compute_delivery_id(self):
+    #     for rec in self:
+    #         rec.delivery_id = None
+    #         if rec.invoice_origin:
+    #             deliveries = self.env['stock.picking'].search([('origin', '=', rec.invoice_origin),
+    #                                                            ('location_dest_id.usage', '=', 'customer')])
+    #             print('del', deliveries)
+    #             for delivery in deliveries:
+    #                 if delivery.date_done:
+    #                     if delivery.date_done.date() == rec.l10n_sa_delivery_date:
+    #                         rec.delivery_id = delivery
+    # for delivery in deliveries:
+    #     if delivery.location_dest_id.usage == 'customer':
 
     @api.depends('invoice_line_ids.quantity')
     def _get_value(self):

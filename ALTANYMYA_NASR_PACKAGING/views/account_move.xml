@@ -11,7 +11,7 @@
                 <field name="Total_quantity_ordered" invisible="1"/>
             </field>
             <field name="invoice_origin" position="after">
-                <field name="delivery_id" invisible="0"/>
+                <field name="delivery_ids" widget="many2many_tags" invisible="0" readonly="1"/>
             </field>
             <xpath expr="//page[@id='other_tab_entry'][1]" position="after">
                 <page string="Bank Details" name="bank_details_page">

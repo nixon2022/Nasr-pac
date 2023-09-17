@@ -138,10 +138,10 @@
                                                 <td style="border-right: 1px solid black;">Sheet Size</td>
                                                 <td style="border-right: 1px solid black;">
                                                     <span style="font-weight: normal;"
-                                                          t-esc="'{:,}'.format(int(o.product_id.sheet_width))"/>
+                                                          t-esc="'{:,}'.format(float(o.product_id.sheet_width))"/>
                                                     <span style="font-weight: normal;">X</span>
                                                     <span style="font-weight: normal;"
-                                                          t-esc="'{:,}'.format(int(o.product_id.sheet_length))"/>
+                                                          t-esc="'{:,}'.format(float(o.product_id.sheet_length))"/>
                                                 </td>
                                                 <td style="border-right: 1px solid black;">Cut Size</td>
                                                 <td style="border-right: 1px solid black;">

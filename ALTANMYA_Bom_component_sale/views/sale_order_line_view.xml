@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_line_in" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <div class="alert alert-info text-center" role="alert" attrs="{'invisible': [('compute_bool', '!=', True)]}">
+                    <a href="#" class="close" data-dismiss="alert">X</a>
+                    <!--                    <button name="warning_button" type="button" class="close" t-if="!widget.options.hide"-->
+                    <!--                            t-on-click="widget.options.hide = true">×-->
+                    <!--                    </button>-->
+                    <strong class=""></strong>
+                    The Component Have Been Changed
+                </div>
+                <field name="compute_bool" invisible="1"/>
+                <!--                <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"-->
+                <!--                     attrs="{'invisible': [('compute_bool', '!=', True)]}"-->
+                <!--                >Your sale order-->
+                <!--                    <button type="button" class="close" t-if="!widget.options.hide"-->
+                <!--                            t-on-click="widget.options.hide = true">×-->
+                <!--                    </button>-->
+
+                <!--                    <bold>-->
+                <!--                        <a class="alert-link" role="button">-->
+                <!--                            <p>-->
+                <!--                                dsadasddasdasd-->
+                <!--                            </p>-->
+                <!--                            &lt;!&ndash;                            <field name="name" readonly="True"/>&ndash;&gt;-->
+                <!--                        </a>-->
+                <!--                    </bold>-->
+                <!--                    going to be expired on-->
+                <!--                    <bold>-->
+                <!--                        <p>-->
+                <!--                            19\20\2020-->
+                <!--                        </p>-->
+                <!--                        &lt;!&ndash;                        <field name="validity_date" readonly="True"/>&ndash;&gt;-->
+                <!--                    </bold>-->
+                <!--                </div>-->
+            </xpath>
+            <xpath expr="//page[1]" position="after">
+                <page string="Component" name="com">
+                    <field name="component_compute" invisible="1"/>
+                    <field name="component" create="true" edit="true" widget="one2many"
+                           attrs="{'readonly': [('state', '=', 'sale')]}">
+                        <tree string="Components" editable="bottom" create="true">
+                            <field name="new_product" context="{'active_id': parent.id}"/>
+                            <field name="bom_order_line" attrs="{'readonly': [('new_product', '=', False)]}"/>
+                            <field name="bom_id" readonly="1" invisible="1"/>
+                            <field name="new_quan"/>
+                            <field name="new_uom"/>
+                            <field name="order_line_from_parent" invisible="1"/>
+                        </tree>
+                        <form>
+                            <sheet>
+                                <group>
+                                    <field name="new_product" context="{'active_id': parent.id}"/>
+                                    <field name="bom_order_line" attrs="{'readonly': [('new_product', '=', False)]}"/>
+                                    <field name="bom_id" readonly="1" invisible="1"/>
+                                    <field name="new_quan"/>
+                                    <field name="new_uom"/>
+                                    <field name="order_line_from_parent" invisible="1"/>
+
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

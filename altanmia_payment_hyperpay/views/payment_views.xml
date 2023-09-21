@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="payment_acquirer_form" model="ir.ui.view">
+        <field name="name">HyperPay Acquirer Form</field>
+        <field name="model">payment.acquirer</field>
+        <field name="inherit_id" ref="payment.payment_acquirer_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position='before'>
+                <div name="options">
+                    <span class="d-inline-block">
+                        <field name="enable_stc"/>
+                        <label for="enable_stc"/>
+                    </span>
+                    <span class="d-inline-block ml-4">
+                        <field name="enable_mada"/>
+                        <label for="enable_mada"/>
+                    </span>
+                    <span class="d-inline-block ml-4">
+                        <field name="enable_apple"/>
+                        <label for="enable_apple"/>
+                    </span>
+                </div>
+            </xpath>
+
+            <xpath expr='//group[@name="acquirer"]' position='inside'>
+
+                <group attrs="{'invisible': [('provider', '!=', 'hyperpay')]}">
+                    <field name="hyperpay_entity_id"
+                           attrs="{'required':[('provider', '=', 'hyperpay'), ('state', '!=', 'disabled')]}"/>
+                    <field name="hyperpay_entity_mada_id"
+                           attrs="{'required':[('provider', '=', 'hyperpay'), ('state', '!=', 'disabled')]}"/>
+                    <field name="hyperpay_entity_applepay_id"
+                           attrs="{'required':[('provider', '=', 'hyperpay'), ('state', '!=', 'disabled')]}"/>
+                    <field name="hyperpay_token"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

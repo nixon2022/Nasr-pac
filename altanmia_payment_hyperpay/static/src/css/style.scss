@@ -1,0 +1,150 @@
+
+ .checkbox-wrapper-16 *,
+  .checkbox-wrapper-16 *:after,
+  .checkbox-wrapper-16 *:before {
+    box-sizing: border-box;
+  }
+
+  .checkbox-wrapper-16 .checkbox-input {
+    clip: rect(0 0 0 0);
+    -webkit-clip-path: inset(100%);
+            clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+  .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile {
+    border-color: theme-color('primary');
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    color: theme-color('primary');
+}
+  }
+  .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile:before {
+    transform: scale(1);
+    opacity: 1;
+    background-color: theme-color('primary');
+    border-color: theme-color('primary');
+  }
+  .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile .checkbox-icon,
+  .checkbox-wrapper-16 .checkbox-input:checked + .checkbox-tile .checkbox-label {
+    color: theme-color('primary');
+  }
+  .checkbox-wrapper-16 .checkbox-input:focus + .checkbox-tile {
+    border-color: theme-color('primary');
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1), 0 0 0 4px #b5c9fc;
+  }
+  .checkbox-wrapper-16 .checkbox-input:focus + .checkbox-tile:before {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .checkbox-wrapper-16 .checkbox-tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 6rem;
+    min-height: 4rem;
+    border-radius: 0.5rem;
+    border: 2px solid #b5bfd9;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: 0.15s ease;
+    cursor: pointer;
+    position: relative;
+    padding-top: 15px;
+    min-width: 120px;
+  }
+
+  .checkbox-wrapper-16 .checkbox-tile:before {
+    content: "";
+    position: absolute;
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #b5bfd9;
+    background-color: #fff;
+    border-radius: 50%;
+    top: 0.25rem;
+    left: 0.25rem;
+    opacity: 0;
+    transform: scale(0);
+    transition: 0.25s ease;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='192' height='192' fill='%23FFFFFF' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' fill='none'%3E%3C/rect%3E%3Cpolyline points='216 72.005 104 184 48 128.005' fill='none' stroke='%23FFFFFF' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 12px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+  }
+  .checkbox-wrapper-16 .checkbox-tile:hover {
+    border-color: theme-color('primary');
+  }
+  .checkbox-wrapper-16 .checkbox-tile:hover:before {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .checkbox-wrapper-16 .checkbox-icon {
+    transition: 0.375s ease;
+    color: #494949;
+  }
+  .checkbox-wrapper-16 .checkbox-icon svg {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .checkbox-wrapper-16 .checkbox-label {
+    color: #707070;
+    transition: 0.375s ease;
+    text-align: center;
+  }
+
+
+  .checkbox-wrapper-37 input[type="checkbox"] {
+    display: none;
+  }
+
+  .checkbox-wrapper-37 .terms-label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+
+  .checkbox-wrapper-37 .terms-label .label-text {
+    margin-left: 10px;
+  }
+
+  .checkbox-wrapper-37 .checkbox-svg {
+    width: 25px;
+    height: 25px;
+    border: 1px solid #e7e3e3;
+    box-shadow: 1px 2px #e7e3e3;
+  }
+
+  .checkbox-wrapper-37 .checkbox-box {
+    fill: #fff;
+    stroke: #ff7a00;
+    stroke-dasharray: 800;
+    stroke-dashoffset: 800;
+    transition: stroke-dashoffset 0.6s ease-in;
+  }
+
+  .checkbox-wrapper-37 .checkbox-tick {
+    stroke: #ff7a00;
+    stroke-dasharray: 172;
+    stroke-dashoffset: 172;
+    transition: stroke-dashoffset 0.6s ease-in;
+  }
+
+  .checkbox-wrapper-37 input[type="checkbox"]:checked + .terms-label .checkbox-box,
+  .checkbox-wrapper-37 input[type="checkbox"]:checked + .terms-label .checkbox-tick {
+    stroke-dashoffset: 0;
+  }
+
+  .filter-title{
+      text-decoration: underline;
+    text-underline-offset: 15px;
+    padding-bottom: 30px;
+    text-decoration-color: #df699c;
+  }

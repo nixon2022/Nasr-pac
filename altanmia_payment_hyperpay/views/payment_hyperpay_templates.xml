@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="redirect_form">
+        <form t-att-action="form_url" class="paymentWidgets" data-brands="VISA MASTER AMEX">
+            <input type="hidden" name="back_url" t-att-value="back_url"/>
+            <input type="hidden" name="js_url" t-att-value="js_url"/>
+            <input type="hidden" name="brand" t-att-value="brand"/>
+        </form>
+    </template>
+
+    <template id="inline_form">
+        <div class="form-group">
+            <fieldset class="checkbox-wrapper-16 mt-3">
+                <label class="checkbox-wrapper mr-1">
+                    <input type="radio" checked="checked" value="visa_master" name="payment_way" class="checkbox-input"/>
+                    <span class="checkbox-tile">
+                        <span >Visa/ Master</span>
+                    </span>
+                </label>
+                <label class="checkbox-wrapper mr-1" t-if="acquirer.enable_mada">
+                    <input type="radio"  value="mada" name="payment_way" class="checkbox-input"/>
+                    <span class="checkbox-tile">
+                        <span >Mada Card</span>
+                    </span>
+                </label>
+                <label class="checkbox-wrapper mr-1" t-if="acquirer.enable_stc">
+                    <input type="radio" value="stc_pay" name="payment_way" class="checkbox-input"/>
+                    <span class="checkbox-tile">
+                        <span >STC Pay</span>
+                    </span>
+                </label>
+                <label class="checkbox-wrapper mr-1" t-if="acquirer.enable_apple">
+                    <input type="radio" value="apple_pay" name="payment_way" class="checkbox-input"/>
+                    <span class="checkbox-tile">
+                        <span >Apple Pay</span>
+                    </span>
+                </label>
+            </fieldset>
+        </div>
+    </template>
+
+    <template id="hyperpay_form">
+        <div class="modal fade o_modal_fullscreen o_form_image_preview" role="dialog" tabindex="-1">
+            <div class="o_viewer_content">
+                <div class="o_viewer-header">
+                    <a aria-label="Close" class="o_close_btn float-right" href="#" role="button" title="Close">×</a>
+                </div>
+
+                <div class="o_viewer_img_wrapper">
+                    <div class="o_viewer_zoomer">
+                        <form t-att-action="back_url" class="paymentWidgets"
+                              t-att-data-brands="brand"/>
+                        <script type="text/javascript" t-att-src="js_url"/>
+                        <t t-if="brand == 'apple_pay'">
+                            <script>
+                                var wpwlOptions = {
+                                paymentTarget:"_top",
+                                applePay: {displayName: "MyStore"},
+                                total: { label: "COMPANY, INC." },
+                                countryCode: "SA",
+                                supportedCountries: ["SA"],
+                                merchantCapabilities: ["supports3DS"],
+                                supportedNetworks: ["masterCard", "visa", "mada"] }
+                                }
+                            </script>
+                            <Style>
+                                .wpwl-apple-pay-button{-webkit-appearance: -apple-pay-button !important;}
+                            </Style>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </template>
+</odoo>

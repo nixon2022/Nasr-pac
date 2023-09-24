@@ -24,6 +24,7 @@ class ShiftProductionNasr(models.Model):
     sheets_done = fields.Float(string='Sheets Done')
     job_ticket_qty = fields.Float(string='Sheets Done', compute="_compute_job_ticket_qty")
     edit_line = fields.Boolean('Edit Line')
+    mr = fields.Boolean('MR')
     maintenance_time = fields.Float(string="Maintenance Time")
     make_ready_time = fields.Float(string="Make Ready Time")
     machine_time = fields.Many2one('mrp.workcenter', string="Machine Name")
@@ -51,6 +52,17 @@ class ShiftProductionNasr(models.Model):
         for rec in self:
             rec.quantity_done = rec.sheets_done * rec.outs
 
+    @api.onchange('operation')
+    def compute_mr(self):
+        for rec in self:
+            if rec.operation and rec.job_ticket.workorder_ids:
+                for order in rec.job_ticket.workorder_ids:
+                    if order.name == rec.operation.name:
+                        rec.mr = order.mr
+                        print('1 rec mr', rec.mr, order.mr)
+            else:
+                rec.mr = False
+
     @api.depends('job_ticket')
     def _compute_job_ticket_qty(self):
         for rec in self:
@@ -77,28 +89,42 @@ class ShiftProductionNasr(models.Model):
             if rec.job_ticket:
                 res = []
                 for record in self.job_ticket.workorder_ids:
-                    filtering = self.env['mrp.routing.workcenter'].search([('name', '=', record.name)])
-                    for filtered in filtering:
-                        if filtered.bom_id.id == self.job_ticket.bom_id.id:
-                            res.append(filtered)
+                    if not record.mr:
+                        filtering = self.env['mrp.routing.workcenter'].search([('name', '=', record.name)])
+                        for filtered in filtering:
+                            if filtered.bom_id.id == self.job_ticket.bom_id.id:
+                                res.append(filtered)
 
-                all_shifts = rec.env['shift.production'].search([('job_ticket', 'in', rec.job_ticket.ids)])
-                if rec.id == min(all_shifts).id:
-                    if res:
-                        if rec.operation.id > min(res).id:
-                            raise ValidationError(
-                                _("There should be other operation/s before this operation."))
+                all_shifts = rec.env['shift.production'].search([('job_ticket', 'in', rec.job_ticket.ids),
+                                                                 ('mr', '=', False)])
+                if all_shifts:
+                    #     for shift in all_shifts:
+                    #         for order in shift.job_ticket.workorder_ids:
+                    #             if shift.operation.name == order.name:
+                    #                 shift.mr = order.mr
+                    #                 print('shift mr', shift.mr, order.mr)
+                    #                 if rec == shift:
+                    #                     rec.mr = order.mr
+                    #                     print('rec mr', rec.mr, order.mr)
+                    #
+                    if rec.id == min(all_shifts).id:
+                        if res:
+                            if rec.operation.id > min(res).id and not rec.mr:
+                                raise ValidationError(
+                                    _("There should be other operation/s before this operation."))
 
     @api.constrains('quantity_done')
     def check_quantity_done(self):
         for rec in self:
             if rec.job_ticket and rec.operation:
-                all_shifts = rec.env['shift.production'].search([('job_ticket', 'in', rec.job_ticket.ids)])
+                all_shifts = rec.env['shift.production'].search([('job_ticket', 'in', rec.job_ticket.ids),
+                                                                 ('mr', '=', False)])
                 shift_all = []
                 for shift in all_shifts:
                     shifts = self.env['shift.production'].search([
                         ('job_ticket', '=', shift.job_ticket.id),
-                        ('operation', '=', shift.operation.id)
+                        ('operation', '=', shift.operation.id),
+                        ('mr', '=', False)
                     ])
                     shift_all.append(shifts)
                 shift_all = [*set(shift_all)]
@@ -106,7 +132,8 @@ class ShiftProductionNasr(models.Model):
                     total = sum(i.mapped('quantity_done'))
                 curr_rec = self.env['shift.production'].search([
                     ('job_ticket', '=', rec.job_ticket.id),
-                    ('operation', '=', rec.operation.id)
+                    ('operation', '=', rec.operation.id),
+                    ('mr', '=', False)
                 ])
                 if len(curr_rec) > 0:
                     total_qty_done = sum(curr_rec.mapped('quantity_done'))

@@ -46,6 +46,7 @@
                         <field name="quantity_done"/>
                         <field name="outs"/>
                         <field name="sheets_done"/>
+                        <field name="mr" invisible="1"/>
                     </group>
                 </sheet>
             </form>
@@ -59,6 +60,7 @@
             <tree string="Shift Productions" editable="top" sample="1" expand="1">
                 <field name="edit_line" invisible="0"/>
                 <field name="sequence"/>
+                <field name="mr" invisible="1"/>
                 <field name="shift" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="job_ticket" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                 <field name="finished_product" attrs="{'readonly':[('edit_line', '=', False)]}"/>

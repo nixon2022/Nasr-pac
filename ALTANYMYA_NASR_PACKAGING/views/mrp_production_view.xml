@@ -30,6 +30,7 @@
                         <tree editable="bottom">
                             <field name="edit_line" invisible="0"/>
                             <field name="sequence"/>
+                            <field name="mr" invisible="1"/>
                             <field name="shift" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                             <field name="job_ticket" attrs="{'readonly':[('edit_line', '=', False)]}"/>
                             <field name="finished_product" attrs="{'readonly':[('edit_line', '=', False)]}"/>
@@ -60,6 +61,16 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="schedule_date_mrp" widget="remaining_days"/>
+            </field>
+        </field>
+    </record>
+    <record id="view_nasr_mrp_workorder_tree_inherited" model="ir.ui.view">
+        <field name="name">mrp.production.work.order.tree.inherited</field>
+        <field name="model">mrp.workorder</field>
+        <field name="inherit_id" ref="mrp.mrp_production_workorder_tree_editable_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="mr"/>
             </field>
         </field>
     </record>

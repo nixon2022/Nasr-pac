@@ -138,7 +138,7 @@
                                                 <span style="font-weight: normal; font-size: 10pt;" t-field="o.order_line[iterations - 2].product_id"/>
                                             </td>
                                             <td colspan="1">
-                                                <span style="font-weight: normal;" t-esc="'{:,.0f}'.format(o.order_line[iterations - 2].product_qty)"/>
+                                                <span style="font-weight: normal;" t-esc="'{:,.2f}'.format(o.order_line[iterations - 2].product_qty)"/>
                                                 <span style="font-weight: normal;" t-field="o.order_line[iterations - 2].product_uom"/>
                                             </td>
                                             <td colspan="1">

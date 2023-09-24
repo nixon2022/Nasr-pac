@@ -15,7 +15,6 @@ class PurchaseOrder(models.Model):
     Via = fields.Char('Via')
     ETA = fields.Char('ETA')
     SN = fields.Integer('SN')
-
     Payment_Method = fields.Char('Payment Method')
 
     qty = fields.Char('Qty')

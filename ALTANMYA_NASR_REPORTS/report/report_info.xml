@@ -9,5 +9,14 @@
         <field name="binding_model_id" ref="model_purchase_order"/>
         <field name="binding_type">report</field>
     </record>
+    <record id="nasr_purchase_report_int" model="ir.actions.report">
+        <field name="name">Purchase Details int</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ALTANMYA_NASR_REPORTS.mm_id_int</field>
+        <field name="report_file">ALTANMYA_NASR_REPORTS.mm_id_int</field>
+        <field name="binding_model_id" ref="model_purchase_order"/>
+        <field name="binding_type">report</field>
+    </record>
 
 </odoo>

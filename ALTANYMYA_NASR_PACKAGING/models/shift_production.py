@@ -18,7 +18,7 @@ class ShiftProductionNasr(models.Model):
     date = fields.Datetime(string='Date')
     duration_from = fields.Float(string='Duration From')
     duration_to = fields.Float(string='Duration To')
-    quantity_done = fields.Float(string='Quantity Done')
+    quantity_done = fields.Float(string='Quantity Done', readonly=False)
     duration = fields.Float(string='Duration', compute="_compute_duration")
     outs = fields.Float(string='Outs')
     sheets_done = fields.Float(string='Sheets Done')
@@ -50,16 +50,17 @@ class ShiftProductionNasr(models.Model):
     @api.onchange('sheets_done', 'outs')
     def compute_quantity_done(self):
         for rec in self:
-            rec.quantity_done = rec.sheets_done * rec.outs
+            if rec.sheets_done != 0:
+                rec.quantity_done = rec.sheets_done * rec.outs
 
     @api.onchange('operation')
     def compute_mr(self):
         for rec in self:
             if rec.operation and rec.job_ticket.workorder_ids:
                 for order in rec.job_ticket.workorder_ids:
-                    if order.name == rec.operation.name:
-                        rec.mr = order.mr
-                        print('1 rec mr', rec.mr, order.mr)
+                    if order.operation_id == rec.operation:
+                        rec.mr = order.operation_id.mr
+                        print('1 rec mr', rec.mr, order.operation_id.mr)
             else:
                 rec.mr = False
 
@@ -89,11 +90,11 @@ class ShiftProductionNasr(models.Model):
             if rec.job_ticket:
                 res = []
                 for record in self.job_ticket.workorder_ids:
-                    if not record.mr:
-                        filtering = self.env['mrp.routing.workcenter'].search([('name', '=', record.name)])
-                        for filtered in filtering:
-                            if filtered.bom_id.id == self.job_ticket.bom_id.id:
-                                res.append(filtered)
+                    if not record.operation_id.mr:
+                        # filtering = self.env['mrp.routing.workcenter'].search([('name', '=', record.name)])
+                        # for filtered in filtering:
+                        #     if filtered.bom_id.id == self.job_ticket.bom_id.id:
+                        res.append(record.operation_id)
 
                 all_shifts = rec.env['shift.production'].search([('job_ticket', 'in', rec.job_ticket.ids),
                                                                  ('mr', '=', False)])

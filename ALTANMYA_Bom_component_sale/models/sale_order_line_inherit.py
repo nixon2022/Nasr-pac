@@ -1,3 +1,5 @@
+from odoo.tools import copy
+
 from odoo import api, fields, models, tools, _
 
 
@@ -31,28 +33,27 @@ class saleorder(models.Model):
                 for line in order.order_line:
 
                     if not line.edited and str(line.id).isdigit():
+                        if line.product_id.bom_ids:
+                            for bom in line.product_id.bom_ids[0]:
 
-                        for bom in line.product_id.bom_ids[0]:
+                                for component in bom.bom_line_ids:
+                                    prorata = (line.product_uom_qty * component.product_qty) / (bom.product_qty)
 
-                            for component in bom.bom_line_ids:
+                                    new_component = self.env['sale.order.component'].create({
+                                        'order_line_from_parent': line.product_id.id,
+                                        'bom_order_line': line.id,
+                                        'new_product': component.product_id.id,
+                                        'bom_id': bom.id,
+                                        'new_quan': prorata,
+                                        'new_uom': component.product_uom_id.id,
+                                        'new_forecast': component.product_id.virtual_available,
+                                        'line_quantity': line.product_uom_qty,
+                                        'component_quantity': component.product_qty,
+                                        'bom_quantity': bom.product_qty,
 
-                                prorata = (line.product_uom_qty * component.product_qty) / (bom.product_qty)
-
-                                new_component = self.env['sale.order.component'].create({
-                                    'order_line_from_parent': line.product_id.id,
-                                    'bom_order_line': line.id,
-                                    'new_product': component.product_id.id,
-                                    'bom_id': bom.id,
-                                    'new_quan': prorata,
-                                    'new_uom': component.product_uom_id.id,
-                                    'new_forecast': component.product_id.virtual_available,
-                                    'line_quantity': line.product_uom_qty,
-                                    'component_quantity': component.product_qty,
-                                    'bom_quantity': bom.product_qty,
-
-                                })
-                                order.component |= new_component
-                                line.edited = True
+                                    })
+                                    order.component |= new_component
+                                    line.edited = True
 
                     else:
                         if line.product_uom_qty and line.edited:
@@ -72,8 +73,8 @@ class saleorder(models.Model):
     def action_confirm(self):
         for product in self.order_line:
             bom_lines = []
+            operation_ids = []
             for component in self.component:
-
                 if component.order_line_from_parent.id == product.product_id.id:
                     bom_line_vals = {
                         'bom_id': component.bom_id,
@@ -83,21 +84,35 @@ class saleorder(models.Model):
                     }
                     bom_lines.append((0, 0, bom_line_vals))
 
+            if product.product_id.bom_ids:
+
+                for operation in product.product_id.bom_ids[0].operation_ids:
+                    new_operation = operation.copy()
+                    # new_operation.bom_id = new_bom
+                    operation_ids.append(new_operation.id)
+                    print("op id -------------------------------------------- ", operation_ids)
+
             new_bom_vals = {
                 'product_id': product.product_id.id,
                 'product_tmpl_id': product.product_id.product_tmpl_id.id,
                 'product_qty': product.product_uom_qty,
                 'bom_line_ids': bom_lines,
+                'operation_ids': operation_ids if operation_ids else None,
+                # 'operation_ids': [(6, 0, product.product_id.bom_ids[0].operation_ids.ids)] if
+                # product.product_id.bom_ids[0].operation_ids else None,
             }
+            print("lllllllllllllllllllllll", product.product_id.bom_ids.operation_ids)
+            print('new_bom_vals : ', new_bom_vals)
             if bom_lines:
                 new_bom = self.env['mrp.bom'].create(new_bom_vals)
+                # new_bom.write({'operation_ids': [(6, 0, operation_ids)]})
                 for com in self.component:
                     if com.order_line_from_parent.id == product.product_id.id:
                         com.bom_id = new_bom
         res = super(saleorder, self).action_confirm()
         return res
 
-    @api.onchange('component')
+    @api.depends('component')
     def _onchange_lines(self):
         if self.component:
             for component in self.component:
@@ -110,8 +125,6 @@ class saleorderline(models.Model):
     _inherit = "sale.order.line"
 
     edited = fields.Boolean(copy=False)
-
-
 
     def unlink(self):
         print('un linkkkkk ')

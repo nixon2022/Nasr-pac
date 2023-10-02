@@ -1,1 +1,1 @@
-from . import sale_order_line_inherit,mrp_production_inherit,sale_order_component_line
+from . import sale_order_line_inherit,mrp_production_inherit,sale_order_component_line,stock_rule_inherit

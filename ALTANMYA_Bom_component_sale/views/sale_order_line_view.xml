@@ -7,12 +7,12 @@
         <field name="arch" type="xml">
             <xpath expr="//form/sheet" position="before">
                 <div class="alert alert-info text-center" role="alert"
-                     attrs="{'invisible': [('compute_bool', '!=', True), ('state', '!=', 'sale')]}">
+                     attrs="{'invisible': ['|', ('state', '!=', 'sale'),('compute_bool', '!=', True)]}">
 
                     <strong class=""></strong>
                     The Component Have Been Changed
                 </div>
-                <field name="compute_bool" invisible="1"/>
+                <field name="compute_bool" invisible="1" />
 
             </xpath>
             <xpath expr="//page[1]" position="after">

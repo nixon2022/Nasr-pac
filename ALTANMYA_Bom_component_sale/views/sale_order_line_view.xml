@@ -7,13 +7,13 @@
         <field name="arch" type="xml">
             <xpath expr="//form/sheet" position="before">
                 <div class="alert alert-info text-center" role="alert"
-                     attrs="{'invisible': ['|', ('state', '!=', 'sale'),('compute_bool', '!=', True)]}">
 
+                     attrs="{'invisible': ['|', '&amp;', ('compute_bool', '=', False), ('state', '=', 'sale'), ('compute_bool', '=', False)]}">
                     <strong class=""></strong>
                     The Component Have Been Changed
+<!--                    {'invisible': ['|', '&amp;', ('compute_bool', '=', True), ('state', '=', 'sale'), ('compute_bool', '=', False)]}"-->
                 </div>
-                <field name="compute_bool" invisible="1" />
-
+                <field name="compute_bool"/>
             </xpath>
             <xpath expr="//page[1]" position="after">
                 <page string="Component" name="com">
@@ -22,7 +22,7 @@
                            attrs="{'readonly': [('state', '=', 'sale')]}">
                         <tree string="Components" editable="bottom" create="true">
                             <field name="new_product" context="{'active_id': parent.id}"/>
-                            <field name="bom_order_line" attrs="{'readonly': [('new_product', '=', False)]}"/>
+                            <field name="bom_order_line" attrs="{'readonly': [('new_product', '=', False)]}" options="{'no_create': True}" />
                             <field name="bom_id" readonly="1" invisible="1"/>
                             <field name="new_quan"/>
                             <field name="new_forecast"/>
@@ -35,7 +35,7 @@
                             <field name="bom_quantity" invisible="1"/>
                             <field name="new_uom_related" invisible="1"/>
                             <field name="order_line_from_parent" invisible="1"/>
-                            <field name="edited_component" invisible="1"/>
+                            <field name="edited_component" invisible="0"/>
                         </tree>
                         <form>
                             <sheet>
@@ -46,7 +46,6 @@
                                     <field name="new_quan"/>
                                     <field name="new_uom"/>
                                     <field name="order_line_from_parent" invisible="1"/>
-
                                 </group>
                             </sheet>
                         </form>

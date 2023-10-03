@@ -54,7 +54,7 @@ class SaleOrderComponent(models.Model):
             else:
                 record.new_related = "Available "
 
-    @api.onchange('new_quan', 'new_product','com')
+    @api.onchange('new_quan', 'new_product')
     def on_change_component(self):
         if self.new_quan or self.new_product:
             self.edited_component = True
@@ -83,10 +83,11 @@ class SaleOrderComponent(models.Model):
         if self.new_product:
             self.new_forecast = self.new_product.virtual_available
         if res:
+
             return res
 
-    def unlink(self):
-        for record in self:
-            record.edited_component = True
-            res= super(SaleOrderComponent, self).unlink()
-        return res
+    # def unlink(self):
+    #
+    #     self.bom_order_line.order_id.compute_bool = True
+    #
+    #     return super(SaleOrderComponent, self).unlink()

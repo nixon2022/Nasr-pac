@@ -112,7 +112,7 @@ class saleorder(models.Model):
         res = super(saleorder, self).action_confirm()
         return res
 
-    @api.depends('component')
+    @api.onchange('component')
     def _onchange_lines(self):
         if self.component:
             for component in self.component:

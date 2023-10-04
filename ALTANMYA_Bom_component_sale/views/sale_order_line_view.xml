@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_order_line_in" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <div class="alert alert-info text-center" role="alert"
+
+                     attrs="{'invisible': ['|', '&amp;', ('compute_bool', '=', False), ('state', '=', 'sale'), ('compute_bool', '=', False)]}">
+                    <strong class=""></strong>
+                    The Component Have Been Changed
+<!--                    {'invisible': ['|', '&amp;', ('compute_bool', '=', True), ('state', '=', 'sale'), ('compute_bool', '=', False)]}"-->
+                </div>
+                <field name="compute_bool"/>
+            </xpath>
+            <xpath expr="//page[1]" position="after">
+                <page string="Component" name="com">
+                    <field name="component_compute" invisible="1"/>
+                    <field name="component" create="true" edit="true" widget="one2many"
+                           attrs="{'readonly': [('state', '=', 'sale')]}">
+                        <tree string="Components" editable="bottom" create="true">
+                            <field name="new_product" context="{'active_id': parent.id}"/>
+                            <field name="bom_order_line" attrs="{'readonly': [('new_product', '=', False)]}" options="{'no_create': True}" />
+                            <field name="bom_id" readonly="1" invisible="1"/>
+                            <field name="new_quan"/>
+                            <field name="new_forecast"/>
+                            <field name="new_related" decoration-danger="new_forecast &lt; new_quan"
+                                   decoration-success="new_forecast &gt;= new_quan"/>
+                            <field name="reserved_quan" invisible="1"/>
+                            <field name="new_uom" readonly="1" force_save="1"/>
+                            <field name="line_quantity" invisible="1"/>
+                            <field name="component_quantity" invisible="1"/>
+                            <field name="bom_quantity" invisible="1"/>
+                            <field name="new_uom_related" invisible="1"/>
+                            <field name="order_line_from_parent" invisible="1"/>
+                            <field name="edited_component" invisible="0"/>
+                        </tree>
+                        <form>
+                            <sheet>
+                                <group>
+                                    <field name="new_product" context="{'active_id': parent.id}"/>
+                                    <field name="bom_order_line" attrs="{'readonly': [('new_product', '=', False)]}"/>
+                                    <field name="bom_id" readonly="1" invisible="1"/>
+                                    <field name="new_quan"/>
+                                    <field name="new_uom"/>
+                                    <field name="order_line_from_parent" invisible="1"/>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -37,12 +37,15 @@ class StockPickingNasr(models.Model):
                         if move_ids:
                             # rec.lot_id_name = ''
                             for move in move_ids:
-                                lot_name ='NPSA' + move.group_id.name[-7:] + move.partial_delivery + ' '
-                                if rec.lot_id_name:
-                                    rec.lot_id_name += lot_name
+                                if move.group_id.name and not isinstance(move.group_id.name, bool):
+                                    lot_name ='NPSA' + move.group_id.name[-7:] + move.partial_delivery + ' '
+                                    if rec.lot_id_name:
+                                        rec.lot_id_name += lot_name
+                                    else:
+                                        rec.lot_id_name = lot_name
+                                    move.dispatched = True
                                 else:
-                                    rec.lot_id_name = lot_name
-                                move.dispatched = True
+                                    lot_name = 'DefaultLotName'
                     if rec.state == 'waiting':
                         rec.lot_id_name = ''
                     

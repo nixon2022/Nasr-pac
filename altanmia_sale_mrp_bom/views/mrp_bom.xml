@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mrp_bom_form_view_inherit_extension" model="ir.ui.view">
+        <field name="name">mrp.bom.form.view.inherit.extension</field>
+        <field name="model">mrp.bom</field>
+        <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bom_line_ids']/tree/field[@name='product_qty']" position="after">
+                <field name="from_sale" invisible="1"/>
+                <field name="forecast_availability"
+                       string="Reserved"
+                       attrs="{'column_invisible': [('parent.from_sale','=', False)]}"
+                       widget="forecast_widget"/>
+            </xpath>
+
+            <xpath expr="//field[@name='type']" position="after">
+                <field name="from_sale" invisible="1"/>
+                <field name="sale_qty" attrs="{'invisible':[('from_sale','=', False)]}"/>
+                <field name="unit_cost" attrs="{'invisible':[('from_sale','=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

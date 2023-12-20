@@ -15,7 +15,6 @@
 
             <xpath expr="//field[@name='type']" position="after">
                 <field name="from_sale" invisible="1"/>
-                <field name="sale_qty" attrs="{'invisible':[('from_sale','=', False)]}"/>
                 <field name="unit_cost" attrs="{'invisible':[('from_sale','=', False)]}"/>
             </xpath>
         </field>

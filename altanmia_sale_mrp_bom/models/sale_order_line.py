@@ -35,6 +35,7 @@ class SaleOrderLine(models.Model):
 
     @api.onchange('bom_id')
     def onchange_parent(self):
+        print("on change called")
         for record in self:
-            record.product_uom_qty = record.bom_id.sale_qty
+            record.product_uom_qty = record.bom_id.product_qty
             record.price_unit = record.bom_id.unit_cost

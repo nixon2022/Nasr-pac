@@ -12,8 +12,8 @@ class SaleOrderLine(models.Model):
         comodel_name="mrp.bom",
         string="BoM",
         domain="[('product_tmpl_id.product_variant_ids', '=', product_id),"
-        "'|', ('product_id', '=', product_id), "
-        "('product_id', '=', False)]",
+               "'|', ('product_id', '=', product_id), "
+               "('product_id', '=', False)]",
     )
 
     @api.constrains("bom_id", "product_id")
@@ -33,9 +33,14 @@ class SaleOrderLine(models.Model):
                 ).format(line_product.name)
             )
 
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        for rec in self:
+            bom = self.env['mrp.bom']._bom_find(rec.product_id, bom_type='normal').get(rec.product_id)
+            rec.bom_id = bom or None
+
     @api.onchange('bom_id')
-    def onchange_parent(self):
-        print("on change called")
+    def onchange_bom(self):
         for record in self:
-            record.product_uom_qty = record.bom_id.product_qty
-            record.price_unit = record.bom_id.unit_cost
+            record.product_uom_qty = record.bom_id.sale_qty or record.product_uom_qty
+            record.price_unit = record.bom_id.unit_cost or record.price_unit

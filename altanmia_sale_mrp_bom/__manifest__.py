@@ -15,4 +15,9 @@
         "views/mrp_bom.xml",
     ],
     "installable": True,
+    'assets': {
+        'web.assets_backend': [
+            "altanmia_sale_mrp_bom/static/src/js/**/*"
+        ]
+    },
 }

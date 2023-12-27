@@ -78,37 +78,27 @@ class MrpBom(models.Model):
         return res
 
     def write(self, vals):
+        product = self.product_id if self.product_id else self.product_tmpl_id.product_variant_id
+        domain = self._bom_find_domain(product,
+                                       bom_type='normal')
+        boms = self.search(domain, order='sequence')
+
         if vals.get("create_as_new", False):
             code = vals.get('code', False)
             if not code:
                 code = self.get_code()
                 if code:
                     vals['code'] = code
-            if vals.get('bom_line_ids', False):
-                create_lines = [line for line in vals.get('bom_line_ids', []) if line[0] == 0]
-                for line in [line for line in vals.get('bom_line_ids', []) if line[0] in [4, 1]]:
-                    origin_line = self.bom_line_ids.filtered(lambda x: x.id == line[1])
-                    values = {
-                        'product_id': origin_line.product_id.id,
-                        'product_qty': origin_line.product_qty,
-                        'product_uom_id': origin_line.product_uom_id.id,
-                    }
-                    if line[0] == 1:
-                        values.update(line[2])
-                    line = (0, 0, values)
-                    create_lines.append(line)
-                vals['bom_line_ids'] = create_lines
+
             vals['create_as_new'] = False
 
-            new_rec = self.copy(default=vals)
-            return new_rec
+            vals['sequence'] = len(boms) + 1
+            new_obj = self.copy()
+            res = super(MrpBom, self).write(vals)
         else:
             res = super(MrpBom, self).write(vals)
-            if vals.get("origin", False):
-                product = self.product_id if self.product_id else self.product_tmpl_id.product_variant_id
-                domain = self._bom_find_domain(product,
-                                               bom_type='normal')
-                boms = self.search(domain, order='sequence')
+
+        if vals.get("origin", False):
                 sequence = 2
                 for bom in boms:
                     if bom.id == self.id:
@@ -116,7 +106,7 @@ class MrpBom(models.Model):
                     else:
                         bom.write({'sequence': sequence})
                         sequence += 1
-            return res
+        return res
 
     def get_code(self):
         if self.product_tmpl_id:

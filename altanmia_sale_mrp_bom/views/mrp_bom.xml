@@ -19,18 +19,15 @@
                 <field name="product_qty" string="Bom Component QTY"/>
             </xpath>
 
+            <xpath expr="//group/div[field[@name='product_qty']]" position="after">
+                <field name="origin" widget="boolean_toggle"/>
+                <field name="create_as_new" widget="boolean_toggle"/>
+            </xpath>
+
             <xpath expr="//field[@name='type']" position="after">
                 <field name="from_sale" invisible="1"/>
                 <field name="sale_qty" attrs="{'invisible':[('from_sale','=', False)]}"/>
                 <field name="unit_cost" attrs="{'invisible':[('from_sale','=', False)]}"/>
-            </xpath>
-            <xpath expr="//form" position="inside">
-                <footer  attrs="{'invisible':[('from_sale','=', False)]}">
-                    <button string="Save" close="1" class="btn-primary" special="save" data-hotkey="s"/>
-                    <button string="Save as new" close="1" class="btn-secondary"
-                            context="{'create_new': True}" special="save" data-hotkey="v"/>
-                    <button string="Discard" close="1" class="btn-default" special="cancel" data-hotkey="z"/>
-                </footer>
             </xpath>
         </field>
     </record>

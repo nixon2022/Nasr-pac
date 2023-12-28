@@ -1,18 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <record id="view_mrp_bom_inherited" model="ir.ui.view">
-        <field name="name">stock.picking.batch.inherited</field>
-        <field name="model">stock.picking.batch</field>
-        <field name="inherit_id" ref="stock.view_picking_form"/>
-        <xpath name="arch" type="xml">
-            <xpath expr="//field[20]" position="after">
-                <field name="delivery_date"/>
-                <field name="pallet"/>
-                <field name="No_of_carton"/>
-                <field name="No_of_pcs"/>
-                <field name="No_of_lose_pallet"/>
-                <field name="qty_done"/>
-            </xpath>
-        </xpath>
-    </record>
-</odoo>
+

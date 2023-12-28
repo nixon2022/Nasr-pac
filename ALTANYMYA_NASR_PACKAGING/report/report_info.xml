@@ -70,7 +70,7 @@
         <field name="binding_type">report</field>
     </record>
     
-        <record id="external_delivery_note_batch" model="ir.actions.report">
+    <record id="ex_pi" model="ir.actions.report">
         <field name="name">External Deliery Note</field>
         <field name="model">stock.picking.batch</field>
         <field name="report_type">qweb-pdf</field>

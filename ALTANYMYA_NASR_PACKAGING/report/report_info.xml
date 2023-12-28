@@ -69,6 +69,16 @@
         <field name="binding_model_id" ref="model_stock_picking"/>
         <field name="binding_type">report</field>
     </record>
+    
+        <record id="external_delivery_note_report" model="ir.actions.report">
+        <field name="name">External Deliery Note</field>
+        <field name="model">stock.picking.batch</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ALTANYMYA_NASR_PACKAGING.nasr_report_external_delivery_note_id</field>
+        <field name="report_file">ALTANYMYA_NASR_PACKAGING.nasr_report_external_delivery_note_id</field>
+        <field name="binding_model_id" ref="model_stock_picking_batch"/>
+        <field name="binding_type">report</field>
+    </record>
 
     <record id="order_confirmation_report" model="ir.actions.report">
         <field name="name">Order Confirmation</field>

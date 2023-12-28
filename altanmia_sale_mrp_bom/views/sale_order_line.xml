@@ -11,8 +11,7 @@
                        'default_product_id': product_id,
                        'default_product_tmpl_id': product_template_id,
                        'default_sale_qty': product_uom_qty,
-                       'default_from_sale': True}"
-                        options='{"always_reload": True}'/>
+                       'default_from_sale': True}"/>
             </xpath>
         </field>
     </record>

@@ -7,7 +7,6 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='bom_line_ids']/tree/field[@name='product_qty']" position="after">
                 <field name="from_sale" invisible="1"/>
-                 <field name="forecast_availability"/>
                 <field name="forecast_availability"
                        string="Reserved"
                        attrs="{'column_invisible': [('parent.from_sale','=', False)]}"
@@ -22,11 +21,7 @@
 
             <xpath expr="//group/div[field[@name='product_qty']]" position="after">
                 <field name="origin" widget="boolean_toggle"/>
-            </xpath>
-
-            <xpath expr="//notebook" position="after">
-                <button string="Save as new" close="1" class="btn-secondary"
-                            context="{'create_new': True}" special="save" data-hotkey="v"/>
+                <field name="create_as_new" widget="boolean_toggle"/>
             </xpath>
 
             <xpath expr="//field[@name='type']" position="after">

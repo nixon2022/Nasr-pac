@@ -52,6 +52,7 @@ class MrpBom(models.Model):
     unit_cost = fields.Float("Unit Cost", compute="_compute_unit_cost", readonly=False, store=True)
     sale_qty = fields.Float("Sale Quantity", compute="_compute_sale_qty")
     origin = fields.Boolean("Origin", store=False, default=lambda self: self.sequence == 1)
+    create_as_new = fields.Boolean("Save As New", store=False, default=True)
 
     def _compute_from_sale(self):
         for rec in self:
@@ -82,17 +83,20 @@ class MrpBom(models.Model):
                                        bom_type='normal')
         boms = self.search(domain, order='sequence')
 
-        if self.env.context.get("create_new", False):
+        if vals.get("create_as_new", False):
             code = vals.get('code', False)
             if not code:
                 code = self.get_code()
                 if code:
                     vals['code'] = code
 
-            vals['sequence'] = len(boms) + 1
-            new_obj = self.with_context(create_new=False).copy()
+            vals['create_as_new'] = False
 
-        res = super(MrpBom, self).write(vals)
+            vals['sequence'] = len(boms) + 1
+            new_obj = self.copy()
+            res = super(MrpBom, self).write(vals)
+        else:
+            res = super(MrpBom, self).write(vals)
 
         if vals.get("origin", False):
                 sequence = 2
@@ -102,7 +106,6 @@ class MrpBom(models.Model):
                     else:
                         bom.write({'sequence': sequence})
                         sequence += 1
-
         return res
 
     def get_code(self):
@@ -111,6 +114,7 @@ class MrpBom(models.Model):
             number_of_bom_of_this_product = self.env['mrp.bom'].search_count(domain)
             if number_of_bom_of_this_product:  # add a reference to the bom if there is already a bom for this product
                 return _("%s (new) %s", self.product_tmpl_id.name, number_of_bom_of_this_product)
+
         return False
 
 
@@ -129,10 +133,6 @@ class MrpBomLine(models.Model):
         for record in self:
             # Check if the product is available based on a product_qty
             needed_quantity = record.product_qty * (record.bom_id.sale_qty or 1) / (record.bom_id.product_qty or 1)
-            record.available = record.product_id.virtual_available
-            record.forecast_availability = record.available - needed_quantity
+            record.forecast_availability = record.product_id.virtual_available - needed_quantity
             record.qty_needed = needed_quantity
-            # _logger
-            # needed_quantity =  90 * 20/5 = 360
-            # record.available = 450
-            #  record.forecast_availability = 450 - 90 =
+            record.available = record.product_id.virtual_available

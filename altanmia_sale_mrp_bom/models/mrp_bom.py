@@ -77,36 +77,24 @@ class MrpBom(models.Model):
         return res
 
     def write(self, vals):
+        product = self.product_id if self.product_id else self.product_tmpl_id.product_variant_id
+        domain = self._bom_find_domain(product,
+                                       bom_type='normal')
+        boms = self.search(domain, order='sequence')
+
         if self.env.context.get("create_new", False):
             code = vals.get('code', False)
             if not code:
                 code = self.get_code()
                 if code:
                     vals['code'] = code
-            if vals.get('bom_line_ids', False):
-                create_lines = [line for line in vals.get('bom_line_ids', []) if line[0] == 0]
-                for line in [line for line in vals.get('bom_line_ids', []) if line[0] in [4, 1]]:
-                    origin_line = self.bom_line_ids.filtered(lambda x: x.id == line[1])
-                    values = {
-                        'product_id': origin_line.product_id.id,
-                        'product_qty': origin_line.product_qty,
-                        'product_uom_id': origin_line.product_uom_id.id,
-                    }
-                    if line[0] == 1:
-                        values.update(line[2])
-                    line = (0, 0, values)
-                    create_lines.append(line)
-                vals['bom_line_ids'] = create_lines
 
-            new_rec = self.with_context(create_new=False).copy(default=vals)
-            return new_rec
-        else:
-            res = super(MrpBom, self).write(vals)
-            if vals.get("origin", False):
-                product = self.product_id if self.product_id else self.product_tmpl_id.product_variant_id
-                domain = self._bom_find_domain(product,
-                                               bom_type='normal')
-                boms = self.search(domain, order='sequence')
+            vals['sequence'] = len(boms) + 1
+            new_obj = self.with_context(create_new=False).copy()
+
+        res = super(MrpBom, self).write(vals)
+
+        if vals.get("origin", False):
                 sequence = 2
                 for bom in boms:
                     if bom.id == self.id:
@@ -114,7 +102,8 @@ class MrpBom(models.Model):
                     else:
                         bom.write({'sequence': sequence})
                         sequence += 1
-            return res
+
+        return res
 
     def get_code(self):
         if self.product_tmpl_id:
@@ -122,7 +111,6 @@ class MrpBom(models.Model):
             number_of_bom_of_this_product = self.env['mrp.bom'].search_count(domain)
             if number_of_bom_of_this_product:  # add a reference to the bom if there is already a bom for this product
                 return _("%s (new) %s", self.product_tmpl_id.name, number_of_bom_of_this_product)
-
         return False
 
 
@@ -141,6 +129,10 @@ class MrpBomLine(models.Model):
         for record in self:
             # Check if the product is available based on a product_qty
             needed_quantity = record.product_qty * (record.bom_id.sale_qty or 1) / (record.bom_id.product_qty or 1)
-            record.forecast_availability = record.product_id.virtual_available - needed_quantity
-            record.qty_needed = needed_quantity
             record.available = record.product_id.virtual_available
+            record.forecast_availability = record.available - needed_quantity
+            record.qty_needed = needed_quantity
+            # _logger
+            # needed_quantity =  90 * 20/5 = 360
+            # record.available = 450
+            #  record.forecast_availability = 450 - 90 =

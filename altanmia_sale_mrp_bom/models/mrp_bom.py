@@ -47,7 +47,7 @@ class MrpBom(models.Model):
         'Quantity',
         digits='Product Unit of Measure',
         default=_get_default_product_qty,
-        required=True, readonly=False)
+        required=True, readonly=False, tracking=True)
 
     from_sale = fields.Boolean('Form sale', compute="_compute_from_sale")
 
@@ -55,6 +55,18 @@ class MrpBom(models.Model):
     sale_qty = fields.Float("Sale Quantity", compute="_compute_sale_qty")
     origin = fields.Boolean("Origin", store=False, default=lambda self: self.sequence == 1)
     create_as_new = fields.Boolean("Save As New", store=False, default=False)
+
+    # add tracking
+
+    product_tmpl_id = fields.Many2one(
+        'product.template', 'Product',
+        check_company=True, index=True, tracking=True,
+        domain="[('type', 'in', ['product', 'consu']), '|', ('company_id', '=', False), ('company_id', '=', company_id)]", required=True)
+    product_id = fields.Many2one(
+        'product.product', 'Product Variant',
+        check_company=True, index=True, tracking=True,
+        domain="['&', ('product_tmpl_id', '=', product_tmpl_id), ('type', 'in', ['product', 'consu']),  '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        help="If a product variant is defined the BOM is available only for this product.")
 
     def _compute_from_sale(self):
         for rec in self:
@@ -122,7 +134,8 @@ class MrpBom(models.Model):
 
 
 class MrpBomLine(models.Model):
-    _inherit = 'mrp.bom.line'
+    _name = 'mrp.bom.line'
+    _inherit = ['mrp.bom.line', "mail.thread", "mail.activity.mixin"]
 
     forecast_availability = fields.Float('Forecast Availability', compute='_compute_forecast_information',
                                          digits='Product Unit of Measure', compute_sudo=True)
@@ -130,6 +143,16 @@ class MrpBomLine(models.Model):
     qty_needed = fields.Float('Needed QTY', compute='_compute_forecast_information')
 
     from_sale = fields.Boolean(related='bom_id.from_sale')
+
+    # add tracking to this fields
+    product_id = fields.Many2one('product.product', 'Component', required=True, check_company=True, tracking=True)
+    product_tmpl_id = fields.Many2one('product.template', 'Product Template', related='product_id.product_tmpl_id',
+                                      store=True, index=True, tracking=True)
+    company_id = fields.Many2one(
+        related='bom_id.company_id', store=True, index=True, readonly=True, tracking=True)
+    product_qty = fields.Float(
+        'Quantity', default=1.0,
+        digits='Product Unit of Measure', required=True, tracking=True)
 
     @api.depends('product_id', 'product_qty', 'bom_id.sale_qty')
     def _compute_forecast_information(self):
@@ -139,3 +162,24 @@ class MrpBomLine(models.Model):
             record.forecast_availability = record.product_id.virtual_available - needed_quantity + record.product_qty
             record.qty_needed = needed_quantity
             record.available = record.product_id.virtual_available
+
+    def _message_log(self, *, body='', author_id=None, email_from=None, subject=False, message_type='notification',
+                     **kwargs):
+        self.bom_id._message_log(
+            body=f"line {self.display_name}({self.product_qty}): {body}", subject=subject, message_type=message_type,
+            **kwargs
+        )
+        return super(MrpBomLine, self)._message_log(**kwargs)
+
+    @api.model
+    def create(self, vals):
+        res = super(MrpBomLine, self).create(vals)
+        message = "Created"
+        res._message_log(body=message)
+        return res
+
+    def unlink(self):
+        for line in self:
+            message = "Deleted"
+            line._message_log(body=message)
+        return super(MrpBomLine, self).unlink()

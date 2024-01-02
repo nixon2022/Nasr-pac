@@ -17,7 +17,8 @@
     "installable": True,
     'assets': {
         'web.assets_backend': [
-            "altanmia_sale_mrp_bom/static/src/js/**/*"
+            "altanmia_sale_mrp_bom/static/src/js/**/*",
+            'altanmia_sale_mrp_bom/static/src/scss/style.scss',
         ]
     },
 }

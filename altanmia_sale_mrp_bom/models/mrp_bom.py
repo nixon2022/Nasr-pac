@@ -2,6 +2,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models, _
+from odoo.exceptions import ValidationError
+
 
 class MrpBom(models.Model):
     """ Defines bills of material for a product or a product template """
@@ -52,7 +54,7 @@ class MrpBom(models.Model):
     unit_cost = fields.Float("Unit Cost", compute="_compute_unit_cost", readonly=False, store=True)
     sale_qty = fields.Float("Sale Quantity", compute="_compute_sale_qty")
     origin = fields.Boolean("Origin", store=False, default=lambda self: self.sequence == 1)
-    create_as_new = fields.Boolean("Save As New", store=False, default=True)
+    create_as_new = fields.Boolean("Save As New", store=False, default=False)
 
     def _compute_from_sale(self):
         for rec in self:
@@ -83,7 +85,8 @@ class MrpBom(models.Model):
                                        bom_type='normal')
         boms = self.search(domain, order='sequence')
 
-        if vals.get("create_as_new", False):
+        # if create_as_new in vals or default_create_as_new in context
+        if vals.get("create_as_new", self._context.get('default_create_as_new', False)):
             code = vals.get('code', False)
             if not code:
                 code = self.get_code()
@@ -133,6 +136,6 @@ class MrpBomLine(models.Model):
         for record in self:
             # Check if the product is available based on a product_qty
             needed_quantity = record.product_qty * (record.bom_id.sale_qty or 1) / (record.bom_id.product_qty or 1)
-            record.forecast_availability = record.product_id.virtual_available - needed_quantity
+            record.forecast_availability = record.product_id.virtual_available - needed_quantity + record.product_qty
             record.qty_needed = needed_quantity
             record.available = record.product_id.virtual_available

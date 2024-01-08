@@ -80,6 +80,7 @@ odoo.define('altanmia_sale_mrp_bom.FormController', function (require) {
             }).guardedCatch(this._enableButtons.bind(this));
         },
         async _saveRecord(recordID, options) {
+            console.info("_saveRecord options", options)
             recordID = recordID || this.handle;
             options = _.defaults(options || {}, {
                 stayInEdit: false,
@@ -115,6 +116,7 @@ odoo.define('altanmia_sale_mrp_bom.FormController', function (require) {
 
     BasicModel.include({
         save: function (recordID, options) {
+            console.info("save from model", options)
             var self = this;
             function _save() {
                 options = options || {};
@@ -166,6 +168,8 @@ odoo.define('altanmia_sale_mrp_bom.FormController', function (require) {
                     // in the case of a write, only perform the RPC if there are changes to save
                     if (method === 'create' || changedFields.length) {
                         var args = method === 'write' ? [[record.data.id], changes] : [changes];
+                        // 2. pass context to
+                        console.info("rec context", record.getContext(options), options)
                         self._rpc({
                                 model: record.model,
                                 method: method,

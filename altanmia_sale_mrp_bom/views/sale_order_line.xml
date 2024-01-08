@@ -5,7 +5,12 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//tree[1]/field[@name='product_template_id']" position="after">
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Bom Summary" name="bom_summary">
+                    <field name="bom_summary" readonly="1"/>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree/field[@name='product_template_id']" position="after">
                 <field name="bom_id"
                        context="{
                        'default_product_id': product_id,

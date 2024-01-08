@@ -93,7 +93,6 @@ class MrpBom(models.Model):
         return res
 
     def write(self, vals):
-        vals['tracking'] = uuid.uuid4()
         product = self.product_id if self.product_id else self.product_tmpl_id.product_variant_id
         domain = self._bom_find_domain(product,
                                        bom_type='normal')

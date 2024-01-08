@@ -32,11 +32,12 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).create(vals)
         html_content = ""
         for line in self.order_line:
+            if not line.bom_id:
+                continue
             html_content += f"""<div>
-                                    <span> {line.display_name}:</span>
-                                    <div class="summary">{line.bom_summary}</div>
+                                    <h3> {line.product_id.name}/ {line.bom_id.code}:</h3>
+                                    <div class="summary ml-5">{line.bom_summary}</div>
                                 </div>"""
-        html_content += "</u>"
         res.write({"bom_summary": html_content})
         return res
 
@@ -87,15 +88,14 @@ class SaleOrderLine(models.Model):
         bom = vals.get('bom_id', self.bom_id.id)
         if bom:
             messages = self.env['mail.message']._message_fetch(domain=[
-                ('res_id', '=', int(bom)),
+                ('res_id', '=', bom),
                 ('model', '=', 'mrp.bom'),
                 ('message_type', '!=', 'user_notification'),
             ], limit=30)
             html_content = "<u class='text-decoration-none'>"
             for msg in messages:
-                print(",es", msg)
                 html_content += f"""<li>
-                                        <span>{msg.get('author_id')[1]}: </span>
+                                        <b>{msg.get('author_id')[1]}: </b>
                                         <i class='text-mute pull-right'>{msg.get("date")}</i>
                                         <span class="msg-body">{msg.get('body', '')}</span>
                                     </li>"""
@@ -108,13 +108,19 @@ class SaleOrderLine(models.Model):
         bom = vals.get('bom_id', False)
         if bom:
             messages = self.env['mail.message']._message_fetch(domain=[
-                ('res_id', '=', int(bom.id)),
+                ('res_id', '=', bom),
                 ('model', '=', 'mrp.bom'),
                 ('message_type', '!=', 'user_notification'),
             ], limit=30)
             html_content = ""
 
+            html_content = "<u class='text-decoration-none'>"
             for msg in messages:
-                html_content += f"<p>{msg.get('body', '')}</p>"
+                html_content += f"""<li>
+                                                    <b>{msg.get('author_id')[1]}: </b>
+                                                    <i class='text-mute pull-right'>{msg.get("date")}</i>
+                                                    <span class="msg-body">{msg.get('body', '')}</span>
+                                                </li>"""
+            html_content += "</u>"
             vals['bom_summary'] = html_content
         return super(SaleOrderLine, self).create(vals)

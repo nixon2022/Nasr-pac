@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
+import uuid
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
-from odoo.osv.expression import AND, NEGATIVE_TERM_OPERATORS
-from odoo.tools import float_round
-
-from collections import defaultdict
+from odoo.exceptions import ValidationError
 
 
 class MrpBom(models.Model):
@@ -51,12 +48,26 @@ class MrpBom(models.Model):
         'Quantity',
         digits='Product Unit of Measure',
         default=_get_default_product_qty,
-        required=True, readonly=False)
+        required=True, readonly=False, tracking=True)
 
     from_sale = fields.Boolean('Form sale', compute="_compute_from_sale")
 
     unit_cost = fields.Float("Unit Cost", compute="_compute_unit_cost", readonly=False, store=True)
     sale_qty = fields.Float("Sale Quantity", compute="_compute_sale_qty")
+    origin = fields.Boolean("Origin", store=False, default=lambda self: self.sequence == 1)
+    create_as_new = fields.Boolean("Save As New", store=False, default=False)
+
+    # add tracking
+
+    product_tmpl_id = fields.Many2one(
+        'product.template', 'Product',
+        check_company=True, index=True, tracking=True,
+        domain="[('type', 'in', ['product', 'consu']), '|', ('company_id', '=', False), ('company_id', '=', company_id)]", required=True)
+    product_id = fields.Many2one(
+        'product.product', 'Product Variant',
+        check_company=True, index=True, tracking=True,
+        domain="['&', ('product_tmpl_id', '=', product_tmpl_id), ('type', 'in', ['product', 'consu']),  '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        help="If a product variant is defined the BOM is available only for this product.")
 
     def _compute_from_sale(self):
         for rec in self:
@@ -74,33 +85,49 @@ class MrpBom(models.Model):
                 total += line.product_id.list_price * line.product_qty / rec.product_qty
             rec.unit_cost = total
 
+    @api.model
+    def create(self, vals):
+        res = super(MrpBom, self).create(vals)
+        if vals.get("origin", False):
+            res.write({'origin': True})
+        return res
+
     def write(self, vals):
-        print("write vales", vals)
-        if self.env.context.get("create_new", False):
+        product = self.product_id if self.product_id else self.product_tmpl_id.product_variant_id
+        domain = self._bom_find_domain(product,
+                                       bom_type='normal')
+        boms = self.search(domain, order='sequence')
+
+        # if create_as_new in vals or default_create_as_new in context
+        if vals.get("create_as_new", self._context.get('default_create_as_new', False)):
             code = vals.get('code', False)
             if not code:
                 code = self.get_code()
                 if code:
                     vals['code'] = code
-            if vals.get('bom_line_ids', False):
-                create_lines = [line for line in vals.get('bom_line_ids', []) if line[0] == 0]
-                for line in [line for line in vals.get('bom_line_ids', []) if line[0] in [4, 1]]:
-                    origin_line = self.bom_line_ids.filtered(lambda x: x.id == line[1])
-                    values = {
-                        'product_id': origin_line.product_id.id,
-                        'product_qty': origin_line.product_qty,
-                        'product_uom_id': origin_line.product_uom_id.id,
-                    }
-                    if line[0] == 1:
-                        values.update(line[2])
-                    line = (0, 0, values)
-                    create_lines.append(line)
-                vals['bom_line_ids'] = create_lines
 
-            new_rec = self.copy(default=vals)
-            return new_rec
+            vals['create_as_new'] = False
+
+            vals['sequence'] = len(boms) + 1
+            default_vals = {'create_as_new': False}
+            if vals.get("origin", False):
+                default_vals['origin'] = False
+
+            new_obj = self.with_context(default_create_as_new=False).copy(default=default_vals)
+            res = super(MrpBom, self).write(vals)
         else:
-            return super(MrpBom, self).write(vals)
+            vals['create_as_new'] = False
+            res = super(MrpBom, self).write(vals)
+
+        if vals.get("origin", False):
+            sequence = 2
+            for bom in boms:
+                if bom.id == self.id:
+                    bom.with_context(default_create_as_new=False).write({'sequence': 1})
+                else:
+                    bom.with_context(default_create_as_new=False).write({'sequence': sequence})
+                    sequence += 1
+        return res
 
     def get_code(self):
         if self.product_tmpl_id:
@@ -113,7 +140,8 @@ class MrpBom(models.Model):
 
 
 class MrpBomLine(models.Model):
-    _inherit = 'mrp.bom.line'
+    _name = 'mrp.bom.line'
+    _inherit = ['mrp.bom.line', "mail.thread", "mail.activity.mixin"]
 
     forecast_availability = fields.Float('Forecast Availability', compute='_compute_forecast_information',
                                          digits='Product Unit of Measure', compute_sudo=True)
@@ -122,11 +150,42 @@ class MrpBomLine(models.Model):
 
     from_sale = fields.Boolean(related='bom_id.from_sale')
 
+    # add tracking to this fields
+    product_id = fields.Many2one('product.product', 'Component', required=True, check_company=True, tracking=True)
+    product_tmpl_id = fields.Many2one('product.template', 'Product Template', related='product_id.product_tmpl_id',
+                                      store=True, index=True, tracking=True)
+    company_id = fields.Many2one(
+        related='bom_id.company_id', store=True, index=True, readonly=True, tracking=True)
+    product_qty = fields.Float(
+        'Quantity', default=1.0,
+        digits='Product Unit of Measure', required=True, tracking=True)
+
     @api.depends('product_id', 'product_qty', 'bom_id.sale_qty')
     def _compute_forecast_information(self):
         for record in self:
             # Check if the product is available based on a product_qty
             needed_quantity = record.product_qty * (record.bom_id.sale_qty or 1) / (record.bom_id.product_qty or 1)
-            record.forecast_availability = record.product_id.virtual_available - needed_quantity
+            record.forecast_availability = record.product_id.virtual_available - needed_quantity + record.product_qty
             record.qty_needed = needed_quantity
             record.available = record.product_id.virtual_available
+
+    def _message_log(self, *, body='', author_id=None, email_from=None, subject=False, message_type='notification',
+                     **kwargs):
+        self.bom_id._message_log(
+            body=f"line {self.display_name}({self.product_qty}): {body}", subject=subject, message_type=message_type,
+            **kwargs
+        )
+        return super(MrpBomLine, self)._message_log(**kwargs)
+
+    @api.model
+    def create(self, vals):
+        res = super(MrpBomLine, self).create(vals)
+        message = "Created"
+        res._message_log(body=message)
+        return res
+
+    def unlink(self):
+        for line in self:
+            message = "Deleted"
+            line._message_log(body=message)
+        return super(MrpBomLine, self).unlink()

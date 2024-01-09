@@ -12,7 +12,7 @@ class SaleOrder(models.Model):
 
     def write(self, vals):
         res = super(SaleOrder, self).write(vals)
-        if vals.get("bom_summary", False):
+        if "bom_summary" in vals:
             return res
 
         html_content = ""
@@ -112,7 +112,6 @@ class SaleOrderLine(models.Model):
                 ('model', '=', 'mrp.bom'),
                 ('message_type', '!=', 'user_notification'),
             ], limit=30)
-            html_content = ""
 
             html_content = "<u class='text-decoration-none'>"
             for msg in messages:

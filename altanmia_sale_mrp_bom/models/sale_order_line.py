@@ -15,31 +15,32 @@ class SaleOrder(models.Model):
         if "bom_summary" in vals:
             return res
 
+        self.write({"bom_summary": self.build_summary(self.order_line)})
+        return res
+
+    def build_summary(self, lines, with_sync=False):
         html_content = ""
-        for line in self.order_line:
+        for line in lines:
             if not line.bom_id:
                 continue
+            line_summary = line.bom_summary if not with_sync else line.sync_bom_summary()
+            print("line summary", line_summary)
             html_content += f"""<div>
                                     <h3> {line.product_id.name}/ {line.bom_id.code}:</h3>
-                                    <div class="summary ml-5">{line.bom_summary}</div>
+                                    <div class="summary">{line_summary}</div>
                                 </div>"""
-
-        self.write({"bom_summary": html_content})
-        return res
+        print("sale order summary", html_content)
+        return html_content
 
     @api.model
     def create(self, vals):
         res = super(SaleOrder, self).create(vals)
-        html_content = ""
-        for line in self.order_line:
-            if not line.bom_id:
-                continue
-            html_content += f"""<div>
-                                    <h3> {line.product_id.name}/ {line.bom_id.code}:</h3>
-                                    <div class="summary ml-5">{line.bom_summary}</div>
-                                </div>"""
-        res.write({"bom_summary": html_content})
+
+        res.write({"bom_summary": self.build_summary(res.order_line)})
         return res
+
+    def sync_bom_summary(self):
+        self.write({"bom_summary": self.build_summary(self.order_line, with_sync=True)})
 
 
 class SaleOrderLine(models.Model):
@@ -84,42 +85,52 @@ class SaleOrderLine(models.Model):
             record.product_uom_qty = record.bom_id.sale_qty or record.product_uom_qty
             record.price_unit = record.bom_id.unit_cost or record.price_unit
 
-    def write(self, vals):
-        bom = vals.get('bom_id', self.bom_id.id)
+    def build_summary(self, bom):
         if bom:
             messages = self.env['mail.message']._message_fetch(domain=[
                 ('res_id', '=', bom),
                 ('model', '=', 'mrp.bom'),
                 ('message_type', '!=', 'user_notification'),
             ], limit=30)
-            html_content = "<u class='text-decoration-none'>"
+
+            html_content = "<ul class='text-decoration-none'>"
             for msg in messages:
+                body = msg.get('body')
+                changed_values = msg.get('tracking_value_ids', [])
+                if not body and changed_values:
+                    body = '<ul class="text-decoration-none">'
+                    for field in changed_values:
+                        body += f"<li>{field.get('changed_field')}: "
+                        if field.get("old_value") != '':
+                            body += f'{field.get("old_value")} --> '
+                        body += str(field.get("new_value"))
+                        body += "</li>"
+
+                    body += "</ul>"
+                elif not body and not changed_values:
+                    continue
+
                 html_content += f"""<li>
-                                        <b>{msg.get('author_id')[1]}: </b>
-                                        <i class='text-mute pull-right'>{msg.get("date")}</i>
-                                        <span class="msg-body">{msg.get('body', '')}</span>
-                                    </li>"""
-            html_content += "</u>"
-            vals['bom_summary'] = html_content
+                                                    <b>{msg.get('author_id')[1]}: </b>
+                                                    <i class='text-mute pull-right'>{msg.get("date")}</i>
+                                                    <div class="msg-body">{body}</div>
+                                                </li>"""
+            html_content += "</ul>"
+            return html_content
+
+    def write(self, vals):
+        bom = vals.get('bom_id', self.bom_id.id)
+
+        vals['bom_summary'] = self.build_summary(bom)
         return super(SaleOrderLine, self).write(vals)
+
+    def sync_bom_summary(self):
+        html_content = self.build_summary(self.bom_id.id)
+        self.write({'bom_summary': html_content})
+        return html_content
 
     @api.model
     def create(self, vals):
         bom = vals.get('bom_id', False)
-        if bom:
-            messages = self.env['mail.message']._message_fetch(domain=[
-                ('res_id', '=', bom),
-                ('model', '=', 'mrp.bom'),
-                ('message_type', '!=', 'user_notification'),
-            ], limit=30)
-
-            html_content = "<u class='text-decoration-none'>"
-            for msg in messages:
-                html_content += f"""<li>
-                                                    <b>{msg.get('author_id')[1]}: </b>
-                                                    <i class='text-mute pull-right'>{msg.get("date")}</i>
-                                                    <span class="msg-body">{msg.get('body', '')}</span>
-                                                </li>"""
-            html_content += "</u>"
-            vals['bom_summary'] = html_content
+        vals['bom_summary'] = self.build_summary(bom)
         return super(SaleOrderLine, self).create(vals)

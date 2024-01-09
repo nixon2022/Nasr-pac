@@ -7,6 +7,8 @@
         <field name="arch" type="xml">
             <xpath expr="//page[@name='order_lines']" position="after">
                 <page string="Bom Summary" name="bom_summary">
+                    <button name="sync_bom_summary"
+                            type="object" string="Sync Bom summary" class="btn-link p-1 my-3" icon="fa-refresh"/>
                     <field name="bom_summary" readonly="1"/>
                 </page>
             </xpath>

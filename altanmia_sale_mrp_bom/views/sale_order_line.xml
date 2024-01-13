@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="sale_order_line_tree" model="ir.ui.view">
+        <field name="name">altanmia_sale_mrp_bom.sale.order</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']" position="after">
+                <page string="Bom Summary" name="bom_summary">
+                    <button name="sync_bom_summary"
+                            type="object" string="Sync Bom summary" class="btn-link p-1 my-3" icon="fa-refresh"/>
+                    <field name="bom_summary" readonly="1"/>
+                </page>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//tree/field[@name='product_template_id']" position="after">
+                <field name="bom_id"
+                       context="{
+                       'default_product_id': product_id,
+                       'default_product_tmpl_id': product_template_id,
+                       'default_sale_qty': product_uom_qty,
+                       'default_create_as_new': True,
+                       'default_from_sale': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

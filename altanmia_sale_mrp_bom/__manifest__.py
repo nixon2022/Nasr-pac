@@ -11,6 +11,7 @@
     "depends": ["mrp", "sale_stock"],
     "data": [
         "security/security.xml",
+        "security/ir.model.access.csv",
         "views/sale_order_line.xml",
         "views/mrp_bom.xml",
     ],

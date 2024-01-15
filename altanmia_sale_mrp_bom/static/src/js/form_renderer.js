@@ -18,7 +18,6 @@ FormRenderer.include({
      */
     _renderNode(node) {
         if (node.tag === 'div' && node.attrs.class === 'op_chatter') {
-            console.info("build the chatter");
             return this._makeChatterContainerTarget();
         }
         return this._super(...arguments);

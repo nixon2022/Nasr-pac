@@ -24,12 +24,10 @@ class SaleOrder(models.Model):
             if not line.bom_id:
                 continue
             line_summary = line.bom_summary if not with_sync else line.sync_bom_summary()
-            print("line summary", line_summary)
             html_content += f"""<div>
                                     <h3> {line.product_id.name}/ {line.bom_id.code}:</h3>
                                     <div class="summary">{line_summary}</div>
                                 </div>"""
-        print("sale order summary", html_content)
         return html_content
 
     @api.model

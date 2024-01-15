@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_routing_workcenter,access_mrp_routing_workcenter,mrp.model_mrp_routing_workcenter,altanmia_sale_mrp_bom.sale_mrp_bom_access_group,1,1,1,1
+access_mrp_bom_byproduct,access_mrp_bom_byproduct,mrp.model_mrp_bom_byproduct,altanmia_sale_mrp_bom.sale_mrp_bom_access_group,1,1,1,1
+access_mrp_document,access_mrp_document,mrp.model_mrp_document,altanmia_sale_mrp_bom.sale_mrp_bom_access_group,1,1,1,1
+access_mrp_bom,access_mrp_bom,mrp.model_mrp_bom,altanmia_sale_mrp_bom.sale_mrp_bom_access_group,1,1,1,1
+access_mrp_bom_line,access_mrp_bom_line,mrp.model_mrp_bom_line,altanmia_sale_mrp_bom.sale_mrp_bom_access_group,1,1,1,1
+access_quality_point,access_quality_point,quality.model_quality_point,altanmia_sale_mrp_bom.sale_mrp_bom_access_group,1,1,1,1

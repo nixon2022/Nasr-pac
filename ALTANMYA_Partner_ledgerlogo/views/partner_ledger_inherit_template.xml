@@ -6,7 +6,7 @@
               inherit_id="account_reports.main_template_with_filter_input_partner" primary="True">
         <xpath expr="//div[hasclass('o_account_reports_header')]" position="before">
             <div class="header" style=" text-align: -webkit-center;">
-                <div class="row" style="width:66%;">
+                <div class="row" style="width:69%;">
                     <div style=" place-content: center;">
                         <img t-if="report.get('company_logo')" t-att-src="image_data_uri(report.get('company_logo'))"
                              alt="Logo"/>

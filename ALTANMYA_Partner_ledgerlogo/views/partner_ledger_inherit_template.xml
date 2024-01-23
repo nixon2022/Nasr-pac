@@ -47,10 +47,15 @@
                         <t t-esc="report.get('company_address_country_id')"/>
                         <br/>
                     </t>
+                    <t t-if="report.get('vat_number')">
+                        <t t-esc="report.get('vat_number')"/>
+                        <br/>
+                    </t>
                     <t t-if="report.get('company_registry')">
                         <t t-esc="report.get('company_registry')"/>
                         <br/>
                     </t>
+                    
 
                 </div>
             </div>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <template id="main_template_with_filter_input_partner_with_edit"
+              inherit_id="account_reports.main_template_with_filter_input_partner" primary="True">
+        <xpath expr="//div[hasclass('o_account_reports_header')]" position="before">
+            <div class="header" style=" text-align: -webkit-center;">
+                <div class="row" style="width:75%;">
+                    <div style=" place-content: center;">
+                        <img t-if="report.get('company_logo')" t-att-src="image_data_uri(report.get('company_logo'))"
+                             alt="Logo"/>
+                    </div>
+                </div>
+            </div>
+
+        </xpath>
+        <xpath expr="//div[hasclass('print_only')]" position="inside">
+            <div class="row print_only" style="margin-top: 20px; margin-bottom: 10px;">
+                <div class="col-4">
+
+<!--                    <t t-if="report.get('company_partner_id')">-->
+<!--                        <t t-esc="report.get('company_partner_id')"/>-->
+<!--                        <br/>-->
+<!--                    </t>-->
+                    <t t-if="report.get('company_address')">
+                        <t t-esc="report.get('company_address')"/>
+                        <br/>
+                    </t>
+                    <t t-if="report.get('company_address_street')">
+                        <t t-esc="report.get('company_address_street')"/>
+                        <br/>
+                    </t>
+                    <t t-if="report.get('company_address_city')">
+                        <t t-esc="report.get('company_address_city')"/>
+                        <br/>
+                    </t>
+                    <t t-if="report.get('company_address_state_id')">
+                        <t t-esc="report.get('company_address_state_id')"/>
+                        <br/>
+                    </t>
+                    <t t-if="report.get('company_address_zip')">
+                        <t t-esc="report.get('company_address_zip')"/>
+                        <br/>
+                    </t>
+                    <t t-if="report.get('company_address_country_id')">
+                        <t t-esc="report.get('company_address_country_id')"/>
+                        <br/>
+                    </t>
+ 		    <t t-if="report.get('vat_number')">
+                        <t t-esc="report.get('vat_number')"/>
+                        <br/>
+                    </t>
+                    <t t-if="report.get('company_registry')">
+                        <t t-esc="report.get('company_registry')"/>
+                        <br/>
+                    </t>
+
+                </div>
+            </div>
+
+        </xpath>
+
+
+    </template>
+
+</odoo>

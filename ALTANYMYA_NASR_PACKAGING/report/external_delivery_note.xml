@@ -15,7 +15,8 @@
                             <t t-set="pages_to_print" t-value="int(len(o.move_line_ids_without_package) / 4) + 1"/>
                         </t>
                         <t t-foreach="range(pages_to_print)" t-as="lines">
-                            <div class="page" dir="LTR" style="font-family: arial; font-size: 11pt; font-weight: bold; width:100%">
+                            <div class="page" dir="LTR"
+                                 style="font-family: arial; font-size: 11pt; font-weight: bold; width:100%">
 
                                 <center style="padding-bottom: 50px; font-size: 18pt; color: #317ec9; font-weight: normal;">
                                     DELIVERY NOTE
@@ -54,21 +55,21 @@
                                             <!--<div style="padding: 2px; background: #317ec9;"/>-->
                                             Deliver To:
                                             <div style="font-weight: normal;">
-                                            <span t-field="o.partner_id"/>
-                                            <br/>
-                                            <t t-if="o.sale_order_id">
-                                                <div t-field="o.sale_order_id.partner_id.company_new_field"/>
-                                            </t>
-                                            <t t-else=" ">
-                                                <div t-field="o.sale_id.partner_id.company_new_field"/>
-                                            </t>
-                                            <t t-if="o.sale_order_id">
-                                                <div t-field="o.sale_order_id.partner_id.street"/>
-                                            </t>
-                                            <t t-else=" ">
-                                                <div t-field="o.sale_id.partner_id.street"/>
-                                            </t>
-                                            <div t-field="o.partner_id.city"/>
+                                                <span t-field="o.partner_id"/>
+                                                <br/>
+                                                <t t-if="o.sale_order_id">
+                                                    <div t-field="o.sale_order_id.partner_id.company_new_field"/>
+                                                </t>
+                                                <t t-else=" ">
+                                                    <div t-field="o.sale_id.partner_id.company_new_field"/>
+                                                </t>
+                                                <t t-if="o.sale_order_id">
+                                                    <div t-field="o.sale_order_id.partner_id.street"/>
+                                                </t>
+                                                <t t-else=" ">
+                                                    <div t-field="o.sale_id.partner_id.street"/>
+                                                </t>
+                                                <div t-field="o.partner_id.city"/>
                                             </div>
                                         </td>
                                     </tr>
@@ -97,7 +98,8 @@
                                     </tr>
                                 </table>
 
-                                <table class="table table-borderless table-sm" style="font-weight: normal; text-align: center; margin-top: 0px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 5px; border: 1px solid #317ec9; width:100%">
+                                <table class="table table-borderless table-sm"
+                                       style="font-weight: normal; text-align: center; margin-top: 0px; border-collapse: separate; border-spacing: 0; overflow: hidden; border-radius: 5px; border: 1px solid #317ec9; width:100%">
                                     <thead>
                                         <tr style="background: #357ec9; color: white;">
                                             <th style="border-right: 1px solid #317ec9;">
@@ -154,9 +156,12 @@
                                                     <t t-if="o.lot_id_name">
                                                         <t t-set="lot_name" t-value="o.lot_id_name.split(' ')"/>
                                                         <t t-foreach="lot_name" t-as="lot">
-                                                            <t t-if="o.move_line_ids_without_package[iterations - 2].job_ticket_id.name[-7:] in lot">
-                                                                <span t-esc="lot"/>
+                                                            <t t-if="o.move_line_ids_without_package[iterations - 2].job_ticket_id.name">
+                                                                <t t-if="o.move_line_ids_without_package[iterations - 2].job_ticket_id.name[-7:] in lot">
+                                                                    <span t-esc="lot"/>
+                                                                </t>
                                                             </t>
+
                                                         </t>
                                                     </t>
                                                 </td>
@@ -168,19 +173,22 @@
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].pallet and o.move_line_ids_without_package[iterations - 2].No_of_carton">
-                                                        <t t-set="carton" t-value="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_carton)) + str('/') + '{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].pallet))"/>
+                                                        <t t-set="carton"
+                                                           t-value="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_carton)) + str('/') + '{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].pallet))"/>
                                                         <t t-esc="carton"/>
                                                     </t>
                                                 </td>
                                                 <td style="border-right: 1px solid #317ec9;">
                                                     <t t-if="o.move_line_ids_without_package[iterations - 2].No_of_pcs and o.move_line_ids_without_package[iterations - 2].No_of_carton">
-                                                        <t t-set="pcs" t-value="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_pcs)) + str('/') + '{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_carton))"/>
+                                                        <t t-set="pcs"
+                                                           t-value="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_pcs)) + str('/') + '{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].No_of_carton))"/>
                                                         <t t-esc="pcs"/>
                                                     </t>
                                                 </td>
                                                 <td>
                                                     <span t-esc="'{:,}'.format(int(o.move_line_ids_without_package[iterations - 2].qty_done))"/>
-                                                    <t t-set="total" t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
+                                                    <t t-set="total"
+                                                       t-value="total + o.move_line_ids_without_package[iterations - 2].qty_done"/>
                                                 </td>
                                             </tr>
                                         </t>
@@ -190,10 +198,11 @@
 
                                 <div style="width: 100%; text-align: right;">
                                     TOTAL QTY          
-<!--                                    <span t-esc="'%.0f'%total"/>-->
+                                    <!--                                    <span t-esc="'%.0f'%total"/>-->
                                     <span t-esc="'{:,}'.format(int(total))"/>
                                 </div>
-                                <table class="table table-borderless" style="font-size: 11pt;font-weight: normal; width:100%;">
+                                <table class="table table-borderless"
+                                       style="font-size: 11pt;font-weight: normal; width:100%;">
                                     <tr>
                                         <td style="text-align: left; width:70%;"/>
                                         <td style="text-align: left; width:30%;">
@@ -237,7 +246,8 @@
                                     </center>
                                     <div class="row" style="report_footer_style">
                                         <div style="width: 100%;">
-                                            <table class="table table-borderless" style="font-weight: normal; width:100%;">
+                                            <table class="table table-borderless"
+                                                   style="font-weight: normal; width:100%;">
                                                 <tr>
                                                     <td style="text-align: left; width:50%;">
                                                         <div>

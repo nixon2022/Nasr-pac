@@ -4,9 +4,9 @@ import markupsafe
 from odoo import api, fields, models, tools, _
 
 class AccountReportInherit(models.AbstractModel):
-
-
     _inherit = 'account.report'
+
+
 
     def _get_html_render_values(self, options, report_manager):
         return {
